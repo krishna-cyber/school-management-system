@@ -1,0 +1,23 @@
+{
+  "name": "school-management-system",
+  "version": "1.0.0",
+  "description": "Nest js project for school management system. Basic MVP for personal skill growth project.",
+  "main": "index.js",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krishna-cyber/school-management-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/krishna-cyber/school-management-system/issues"
+  },
+  "homepage": "https://github.com/krishna-cyber/school-management-system#readme"
+}
