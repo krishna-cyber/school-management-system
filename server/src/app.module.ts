@@ -10,6 +10,10 @@ import { APP_FILTER } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { logger } from '@sentry/nestjs';
+import { StudentModule } from './student/student.module';
+import { TeacherModule } from './teacher/teacher.module';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { ExamModule } from './exam/exam.module';
 
 @Module({
   imports: [
@@ -34,6 +38,10 @@ import { logger } from '@sentry/nestjs';
         return connection;
       },
     }),
+    StudentModule,
+    TeacherModule,
+    AnalyticsModule,
+    ExamModule,
   ],
   controllers: [AppController],
   providers: [
