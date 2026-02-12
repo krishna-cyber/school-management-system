@@ -2,7 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Contact, ContactSchema } from './contact.schema';
 
-export type ParentDocument = HydratedDocument<Parent>;
+export type ParentDocumentOverride = {
+  contact: Contact;
+};
+export type ParentDocument = HydratedDocument<Parent, ParentDocumentOverride>;
 
 @Schema({
   timestamps: true,

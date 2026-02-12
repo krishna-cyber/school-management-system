@@ -1,7 +1,14 @@
 import { Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { Parent, ParentSchema } from './parent.schema';
 
-export type StudentDocument = HydratedDocument<Student>;
+export type StudentDocumentOverride = {
+  parent: Types.Subdocument<Types.ObjectId> & Parent;
+};
+export type StudentDocument = HydratedDocument<
+  Student,
+  StudentDocumentOverride
+>;
 
 @Schema({
   timestamps: true,
@@ -30,6 +37,9 @@ export class Student {
 
   @Prop({ required: true, type: String })
   address: string;
+
+  @Prop({ type: ParentSchema, required: true })
+  parent: Parent;
 
   @Virtual({
     get: function (this: Student) {
