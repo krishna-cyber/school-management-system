@@ -13,15 +13,20 @@ import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ExamModule } from './exam/exam.module';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
     SentryModule.forRoot(),
-    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      load: [configuration],
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
+        uri: configService.get<string>('database.connectionString'),
         onConnectionCreate(connection) {
           connection.on('connected', () => {
             logger.info('MongoDB connection established successfully', {
