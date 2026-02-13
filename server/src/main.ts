@@ -5,12 +5,10 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    bodyParser: false, // Required for better-auth
-  });
+  const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, disableErrorMessages: true }),
+    new ValidationPipe({ whitelist: true, disableErrorMessages: false }),
   );
 
   const config = new DocumentBuilder()

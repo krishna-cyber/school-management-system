@@ -8,16 +8,17 @@ import {
   IsPhoneNumber,
   IsString,
   Max,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { Types } from 'mongoose';
 import { Type } from 'class-transformer';
 
 export class ContactDto {
-  @IsPhoneNumber()
-  @IsArray({ each: true })
+  @IsPhoneNumber(undefined, { each: true })
+  @IsArray()
   @IsOptional()
-  phoone_number: string[];
+  phone_number: string[];
 
   @IsArray()
   @IsEmail({}, { each: true })
@@ -26,7 +27,7 @@ export class ContactDto {
 }
 class ParentDto {
   @IsString()
-  @Max(255)
+  @MaxLength(255)
   full_name: string;
 
   @IsString()
@@ -56,10 +57,11 @@ class ParentDto {
 
 export class CreateStudentDto {
   @IsString()
-  @Max(255)
+  @MaxLength(255)
   full_name: string;
 
   @IsDate()
+  @Type(() => Date)
   date_of_birth: Date;
 
   @IsString()
