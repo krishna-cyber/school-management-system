@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "school-management-system",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

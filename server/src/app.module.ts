@@ -6,14 +6,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SentryModule, SentryGlobalFilter } from '@sentry/nestjs/setup';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { logger } from '@sentry/nestjs';
 import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ExamModule } from './exam/exam.module';
+import { ClassModule } from './class/class.module';
+import { FeeModule } from './fee/fee.module';
 import configuration from './config/configuration';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -47,10 +50,19 @@ import configuration from './config/configuration';
       }),
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        { name: 'short', limit: 3, ttl: seconds(4) },
+        { name: 'medium', limit: 15, ttl: seconds(30) },
+        { name: 'long', limit: 25, ttl: seconds(80) },
+      ],
+    }),
     StudentModule,
     TeacherModule,
     AnalyticsModule,
     ExamModule,
+    ClassModule,
+    FeeModule,
   ],
   controllers: [AppController],
   providers: [
@@ -59,6 +71,11 @@ import configuration from './config/configuration';
       provide: APP_FILTER,
       useClass: SentryGlobalFilter,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
+  exports: [MongooseModule],
 })
 export class AppModule {}

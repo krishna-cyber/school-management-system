@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Parent, ParentSchema } from './parent.schema';
+import { Class } from 'src/class/schemas/class.schema';
 
 export type StudentDocumentOverride = {
   parent: Types.Subdocument<Types.ObjectId> & Parent;
+  class: Types.Subdocument<Types.ObjectId> & Class;
 };
 export type StudentDocument = HydratedDocument<
   Student,
@@ -34,6 +36,9 @@ export class Student {
 
   @Prop({ type: String })
   photo: string;
+
+  @Prop({ required: true, type: Types.ObjectId, ref: Class.name })
+  class: Types.ObjectId;
 
   @Prop({ required: true, type: String })
   address: string;
