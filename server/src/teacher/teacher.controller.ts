@@ -10,10 +10,18 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
-import { CreateTeacherDto } from './dto/create-teacher.dto';
+import {
+  CreateTeacherDto,
+  CreateTeacherResponseDto,
+} from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { TeacherDataTransferService } from './teacher-data-transfer.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBadRequestResponse,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('teacher')
 export class TeacherController {
@@ -22,6 +30,19 @@ export class TeacherController {
     private readonly teacherImportService: TeacherDataTransferService,
   ) {}
 
+  @ApiOperation({ summary: 'Register a new teacher' })
+  @ApiResponse({
+    status: 201,
+    description: 'The teacher has been successfully created.',
+    type: CreateTeacherResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input data.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+    },
+  })
   @Post()
   create(@Body() createTeacherDto: CreateTeacherDto) {
     return this.teacherService.create(createTeacherDto);

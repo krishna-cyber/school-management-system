@@ -7,7 +7,6 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
-  Max,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
@@ -104,6 +103,16 @@ export class CreateStudentDto {
   full_name: string;
 
   @ApiProperty({
+    description: 'The gender of the student',
+    enumName: 'Gender',
+    enum: ['male', 'female', 'other'],
+    example: 'male',
+  })
+  @IsString()
+  @IsEnum(['male', 'female', 'other'])
+  gender: string;
+
+  @ApiProperty({
     description: 'The date of birth of the student',
     example: '2005-05-15',
   })
@@ -149,4 +158,18 @@ export class CreateStudentDto {
   @ValidateNested()
   @Type(() => ParentDto)
   parent: ParentDto;
+}
+
+export class CreateStudentResponseDto {
+  @ApiProperty({
+    description: 'Indicates whether the student was created successfully',
+    example: true,
+  })
+  success: boolean;
+
+  @ApiProperty({
+    description: 'A message describing the result of the operation',
+    example: 'Student registered successfully',
+  })
+  message: string;
 }

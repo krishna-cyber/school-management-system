@@ -37,6 +37,9 @@ export class Student {
   @Prop({ type: String })
   photo: string;
 
+  @Prop({ type: String, required: true, enum: ['male', 'female', 'other'] })
+  gender: string;
+
   @Prop({ required: true, type: Types.ObjectId, ref: Class.name })
   class: Types.ObjectId;
 
@@ -64,3 +67,8 @@ export class Student {
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
+
+StudentSchema.index(
+  { class: 1, full_name: 1, date_of_birth: 1 },
+  { unique: true },
+);

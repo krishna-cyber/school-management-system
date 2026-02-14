@@ -1,0 +1,31 @@
+meta {
+  name: register-teacher
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/teacher
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "full_name": "Krishna Tiwari",
+    "gender":"male",
+    "contact": {
+      "phone_number":[ "+9779868880218"],
+      "email":[ "teacher@example.com"]
+    },
+    "salary": 50000,
+    "photo": "http://example.com/photo.jpg",
+    "qualification": "MSc in Computer Science"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

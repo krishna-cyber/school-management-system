@@ -30,6 +30,7 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('database.connectionString'),
+        autoIndex: true,
         onConnectionCreate(connection) {
           connection.on('connected', () => {
             logger.info('MongoDB connection established successfully', {

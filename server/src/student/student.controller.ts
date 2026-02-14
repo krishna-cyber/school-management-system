@@ -10,10 +10,18 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { CreateStudentDto } from './dto/create-student.dto';
+import {
+  CreateStudentDto,
+  CreateStudentResponseDto,
+} from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentDataTransferService } from './student-data-transfer.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBadRequestResponse,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('student')
 export class StudentController {
@@ -22,6 +30,19 @@ export class StudentController {
     private readonly studentImportService: StudentDataTransferService,
   ) {}
 
+  @ApiOperation({ summary: 'Register a new student' })
+  @ApiResponse({
+    status: 201,
+    description: 'The student has been successfully created.',
+    type: CreateStudentResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input data.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+    },
+  })
   @Post()
   create(@Body() createStudentDto: CreateStudentDto) {
     return this.studentService.create(createStudentDto);

@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Teacher } from './schemas/teacher.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TeacherService {
-  create(createTeacherDto: CreateTeacherDto) {
-    return 'This action adds a new teacher';
+  constructor(
+    @InjectModel(Teacher.name) private readonly teacherModel: Model<Teacher>,
+  ) {}
+  async create(createTeacherDto: CreateTeacherDto) {
+    const createTeacher = new this.teacherModel(createTeacherDto);
+    await createTeacher.save();
+    return { success: true, message: 'Teacher registered successfully' };
   }
 
   findAll() {

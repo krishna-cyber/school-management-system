@@ -19,6 +19,9 @@ export class Teacher {
   @Prop({ type: ContactSchema })
   contact: Contact;
 
+  @Prop({ type: String, enum: ['male', 'female', 'other'], required: true })
+  gender: string;
+
   @Prop({ type: Number, required: true })
   salary: number;
 
