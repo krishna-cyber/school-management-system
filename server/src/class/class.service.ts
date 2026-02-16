@@ -3,7 +3,7 @@ import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Class } from './schemas/class.schema';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 
 @Injectable()
 export class ClassService {
@@ -41,8 +41,11 @@ export class ClassService {
     return this.classModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} class`;
+  findOne(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid class ID');
+    }
+    return this.classModel.findById(id);
   }
 
   update(id: number, updateClassDto: UpdateClassDto) {

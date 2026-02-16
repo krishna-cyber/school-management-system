@@ -46,9 +46,23 @@ export class ClassController {
     return this.classService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get a class by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The class has been successfully retrieved.',
+    type: CreateClassDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid class ID',
+    example: {
+      statusCode: 400,
+      message: 'Invalid class ID',
+      error: 'Bad Request',
+    },
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.classService.findOne(+id);
+    return this.classService.findOne(id);
   }
 
   @Patch(':id')

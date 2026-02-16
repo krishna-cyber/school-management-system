@@ -53,9 +53,23 @@ export class TeacherController {
     return this.teacherService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get a teacher by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The teacher has been successfully retrieved.',
+    type: CreateTeacherDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid teacher ID.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'Invalid teacher ID',
+    },
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.teacherService.findOne(+id);
+    return this.teacherService.findOne(id);
   }
 
   @Patch(':id')

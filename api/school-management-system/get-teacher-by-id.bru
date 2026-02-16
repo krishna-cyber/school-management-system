@@ -1,0 +1,16 @@
+meta {
+  name: get-teacher-by-id
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{base_url}}/teacher/699024906226363f58ba4e07
+  body: json
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

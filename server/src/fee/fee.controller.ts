@@ -45,9 +45,23 @@ export class FeeController {
     return this.feeService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get a Fee by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The fee has been successfully retrieved.',
+    type: CreateFeeDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid fee ID',
+    example: {
+      statusCode: 400,
+      message: 'Invalid fee ID',
+      error: 'Bad Request',
+    },
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.feeService.findOne(+id);
+    return this.feeService.findOne(id);
   }
 
   @Patch(':id')

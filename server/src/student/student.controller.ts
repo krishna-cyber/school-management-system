@@ -58,7 +58,7 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'The student has been successfully retrieved.',
-    type: CreateStudentResponseDto,
+    type: CreateStudentDto,
   })
   @ApiBadRequestResponse({
     description: 'Invalid student ID format.',
