@@ -40,7 +40,12 @@ export class Student {
   @Prop({ type: String, required: true, enum: ['male', 'female', 'other'] })
   gender: string;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: Class.name })
+  @Prop({
+    required: true,
+    type: Types.ObjectId,
+    ref: Class.name,
+    autopopulate: true,
+  })
   class: Types.ObjectId;
 
   @Prop({ required: true, type: String })

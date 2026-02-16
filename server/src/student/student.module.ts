@@ -8,10 +8,15 @@ import { StudentDataTransferService } from './student-data-transfer.service';
 @Module({
   imports: [
     //only register the student schema, the parent and contact schemas are used as subdocuments in the student schema
-    MongooseModule.forFeature([
+    MongooseModule.forFeatureAsync([
       {
         name: Student.name,
-        schema: StudentSchema,
+        useFactory: () => {
+          const schema = StudentSchema;
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          schema.plugin(require('mongoose-autopopulate'));
+          return schema;
+        },
       },
     ]),
   ],

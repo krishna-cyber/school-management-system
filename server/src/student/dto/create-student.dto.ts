@@ -139,6 +139,7 @@ export class CreateStudentDto {
     example: '60c72b2f9b1d8e5a5c8f9b1d',
   })
   @IsMongoId()
+  @Type(() => Types.ObjectId)
   class: Types.ObjectId;
 
   @ApiProperty({

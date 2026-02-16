@@ -22,6 +22,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 @Controller('student')
 export class StudentController {
@@ -53,9 +54,23 @@ export class StudentController {
     return this.studentService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get a student by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The student has been successfully retrieved.',
+    type: CreateStudentResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid student ID format.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'Invalid student ID format',
+    },
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.studentService.findOne(+id);
+    return this.studentService.findOne(id);
   }
 
   @Patch(':id')

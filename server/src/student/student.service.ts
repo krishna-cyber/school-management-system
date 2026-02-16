@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Student } from './schemas/student.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
+import { Class } from 'src/class/schemas/class.schema';
 
 @Injectable()
 export class StudentService {
@@ -20,8 +21,11 @@ export class StudentService {
     return `This action returns all student`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid student ID format');
+    }
+    return this.studentModel.findById(id);
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {
