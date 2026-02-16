@@ -1,0 +1,39 @@
+meta {
+  name: register-class
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/class
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Class 7",
+    "compulsory_subjects": [
+      {
+        "name": "Mathematics",
+        "publication": "CDC Nepal"
+      },
+      {
+        "name": "Science",
+        "publication": "CDC Nepal"
+      }
+    ],
+    "optional_subject": [
+      {
+        "name": "Computer Science",
+        "publication": "CDC Nepal"
+      }
+    ]
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

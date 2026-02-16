@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFeeDto } from './dto/create-fee.dto';
 import { UpdateFeeDto } from './dto/update-fee.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Fee } from './schemas/fee.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class FeeService {
-  create(createFeeDto: CreateFeeDto) {
-    return 'This action adds a new fee';
+  constructor(@InjectModel(Fee.name) private readonly feeModel: Model<Fee>) {}
+  async create(createFeeDto: CreateFeeDto) {
+    const createdFee = new this.feeModel(createFeeDto);
+    await createdFee.save();
+    return {
+      success: true,
+      message: 'Fee created successfully',
+    };
   }
 
   findAll() {

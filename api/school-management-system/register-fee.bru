@@ -1,0 +1,30 @@
+meta {
+  name: register-fee
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/fee
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "School Bus Fee",
+    "type": "transportation",
+    "amount": 2000,
+    "discount": 0,
+    "valid_from": "2026-01-01T00:00:00.000Z",
+    "valid_to": null,
+    "is_active": true,
+    "repetition": "monthly"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

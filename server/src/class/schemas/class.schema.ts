@@ -12,10 +12,10 @@ export type ClassDocument = HydratedDocument<Class, ClassDocumentOverride>;
   timestamps: true,
 })
 export class Class {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   title: string;
 
-  @Prop({ type: [SubjectSchema], required: true, unique: true })
+  @Prop({ type: [SubjectSchema], required: true })
   compulsory_subjects: Subject[];
 
   @Prop({ type: [SubjectSchema], default: [], unique: true })

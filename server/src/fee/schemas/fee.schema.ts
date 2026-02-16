@@ -42,6 +42,7 @@ export class Fee {
 
   @Prop({
     type: Date,
+    default: null,
   })
   valid_to: Date;
 
@@ -57,7 +58,7 @@ export class Fee {
     enum: ['daily', 'weekly', 'monthly', 'yearly', 'one-time'],
     default: 'monthly',
   })
-  repetation: string;
+  repetition: string;
 }
 
 export const FeeSchema = SchemaFactory.createForClass(Fee);
