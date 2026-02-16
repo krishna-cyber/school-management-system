@@ -10,12 +10,17 @@ import {
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
-import { ApiBadRequestResponse, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('class')
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
 
+  @ApiOperation({ summary: 'Register a new student' })
   @ApiResponse({
     status: 201,
     description: 'The class has been successfully created.',
