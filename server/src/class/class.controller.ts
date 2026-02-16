@@ -65,13 +65,44 @@ export class ClassController {
     return this.classService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update a class by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The class has been successfully updated.',
+    type: CreateClassDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid class ID',
+    example: {
+      statusCode: 400,
+      message: 'Invalid class ID',
+      error: 'Bad Request',
+    },
+  })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
-    return this.classService.update(+id, updateClassDto);
+    return this.classService.update(id, updateClassDto);
   }
 
+  @ApiOperation({ summary: 'Delete a class by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The class has been successfully deleted.',
+    example: {
+      success: true,
+      message: 'Class deleted successfully',
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid class ID',
+    example: {
+      statusCode: 400,
+      message: 'Invalid class ID',
+      error: 'Bad Request',
+    },
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.classService.remove(+id);
+    return this.classService.remove(id);
   }
 }

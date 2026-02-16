@@ -72,14 +72,45 @@ export class TeacherController {
     return this.teacherService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update a teacher by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The teacher has been successfully updated.',
+    type: CreateTeacherDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid teacher ID or input data.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'Invalid teacher ID or input data',
+    },
+  })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto) {
-    return this.teacherService.update(+id, updateTeacherDto);
+    return this.teacherService.update(id, updateTeacherDto);
   }
 
+  @ApiOperation({ summary: 'Delete a teacher by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The teacher has been successfully deleted.',
+    example: {
+      success: true,
+      message: 'Teacher deleted successfully',
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid teacher ID.',
+    example: {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'Invalid teacher ID',
+    },
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.teacherService.remove(+id);
+    return this.teacherService.remove(id);
   }
 
   @Post('/import')

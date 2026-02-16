@@ -17,6 +17,7 @@ import { ClassModule } from './class/class.module';
 import { FeeModule } from './fee/fee.module';
 import configuration from './config/configuration';
 import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       cache: true,
       load: [configuration],
     }),
+
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -57,6 +59,15 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         { name: 'medium', limit: 15, ttl: seconds(30) },
         { name: 'long', limit: 25, ttl: seconds(80) },
       ],
+    }),
+    BullModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get('redis.host'),
+          port: configService.get('redis.port'),
+        },
+      }),
+      inject: [ConfigService],
     }),
     StudentModule,
     TeacherModule,

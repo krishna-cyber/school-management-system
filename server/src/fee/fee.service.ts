@@ -29,11 +29,17 @@ export class FeeService {
     return this.feeModel.findById(id);
   }
 
-  update(id: number, updateFeeDto: UpdateFeeDto) {
-    return `This action updates a #${id} fee`;
+  update(id: string, updateFeeDto: UpdateFeeDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid fee ID');
+    }
+    return this.feeModel.findByIdAndUpdate(id, updateFeeDto, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fee`;
+  remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid fee ID');
+    }
+    return this.feeModel.findByIdAndDelete(id);
   }
 }

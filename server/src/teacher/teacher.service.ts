@@ -27,11 +27,19 @@ export class TeacherService {
     return this.teacherModel.findById(id);
   }
 
-  update(id: number, updateTeacherDto: UpdateTeacherDto) {
-    return `This action updates a #${id} teacher`;
+  update(id: string, updateTeacherDto: UpdateTeacherDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid teacher ID');
+    }
+    return this.teacherModel.findByIdAndUpdate(id, updateTeacherDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} teacher`;
+  remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid teacher ID');
+    }
+    return this.teacherModel.findByIdAndDelete(id);
   }
 }

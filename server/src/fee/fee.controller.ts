@@ -64,13 +64,44 @@ export class FeeController {
     return this.feeService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update a fee by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The fee has been successfully updated.',
+    type: CreateFeeDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid fee ID or input data.',
+    example: {
+      statusCode: 400,
+      message: 'Invalid fee ID or input data',
+      error: 'Bad Request',
+    },
+  })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFeeDto: UpdateFeeDto) {
-    return this.feeService.update(+id, updateFeeDto);
+    return this.feeService.update(id, updateFeeDto);
   }
 
+  @ApiOperation({ summary: 'Delete a fee by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The fee has been successfully deleted.',
+    example: {
+      success: true,
+      message: 'Fee deleted successfully',
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid fee ID',
+    example: {
+      statusCode: 400,
+      message: 'Invalid fee ID',
+      error: 'Bad Request',
+    },
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.feeService.remove(+id);
+    return this.feeService.remove(id);
   }
 }

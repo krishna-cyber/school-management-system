@@ -1,0 +1,20 @@
+meta {
+  name: import-students-from-excel
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{base_url}}/student/import
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  ~file: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -48,11 +48,19 @@ export class ClassService {
     return this.classModel.findById(id);
   }
 
-  update(id: number, updateClassDto: UpdateClassDto) {
-    return `This action updates a #${id} class`;
+  update(id: string, updateClassDto: UpdateClassDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid class ID');
+    }
+    return this.classModel.findByIdAndUpdate(id, updateClassDto, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} class`;
+  async remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid class ID');
+    }
+    await this.classModel.findByIdAndDelete(id);
+
+    return { success: true, message: 'Class deleted successfully' };
   }
 }

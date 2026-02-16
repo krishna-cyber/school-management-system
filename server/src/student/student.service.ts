@@ -4,7 +4,6 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Student } from './schemas/student.schema';
 import mongoose, { Model } from 'mongoose';
-import { Class } from 'src/class/schemas/class.schema';
 
 @Injectable()
 export class StudentService {
@@ -28,11 +27,20 @@ export class StudentService {
     return this.studentModel.findById(id);
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+  update(id: string, updateStudentDto: UpdateStudentDto) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid student ID format');
+    }
+    return this.studentModel.findByIdAndUpdate(id, updateStudentDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} student`;
+  async remove(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid student ID format');
+    }
+    await this.studentModel.findByIdAndDelete(id);
+    return { success: true, message: 'Student deleted successfully' };
   }
 }

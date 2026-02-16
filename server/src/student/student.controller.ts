@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import {
@@ -22,7 +23,6 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { Types } from 'mongoose';
 
 @Controller('student')
 export class StudentController {
@@ -73,21 +73,47 @@ export class StudentController {
     return this.studentService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update a student by ID' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentService.update(+id, updateStudentDto);
+    return this.studentService.update(id, updateStudentDto);
   }
 
+  @ApiOperation({ summary: 'Delete a student by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The student has been successfully deleted.',
+    example: {
+      success: true,
+      message: 'Student deleted successfully',
+    },
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.studentService.remove(+id);
+    return this.studentService.remove(id);
   }
 
   @Post('/import')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      dest: './uploads',
+      fileFilter(req, file, callback) {
+        const allowedMimeTypes = [
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.ms-excel',
+        ];
+        if (!allowedMimeTypes.includes(file.mimetype)) {
+          return callback(
+            new BadRequestException('Only Excel files are allowed'),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+    }),
+  )
   importStudents(@UploadedFile() file: Express.Multer.File) {
-    console.log('Received file:', file);
-    return this.studentImportService.import();
+    return this.studentImportService.import(file);
   }
 
   @Get('/export')
