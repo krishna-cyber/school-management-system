@@ -1,7 +1,7 @@
 export default () => ({
   port: process.env.PORT || 3000,
   database: {
-    connectionString: process.env.DATABASE_CONNECTION_STRING,
+    connectionString: process.env.DATABASE_CONNECTION_STRING as string,
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',

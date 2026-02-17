@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,7 +26,6 @@ import { BullModule } from '@nestjs/bullmq';
       cache: true,
       load: [configuration],
     }),
-
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -61,14 +59,17 @@ import { BullModule } from '@nestjs/bullmq';
       ],
     }),
     BullModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         connection: {
           host: configService.get('redis.host'),
           port: configService.get('redis.port'),
         },
+        defaultJobOptions: { removeOnComplete: true, attempts: 3 },
       }),
       inject: [ConfigService],
     }),
+    BullModule.registerQueue({ name: 'importQueue' }, { name: 'invoiceQueue' }),
     StudentModule,
     TeacherModule,
     AnalyticsModule,
