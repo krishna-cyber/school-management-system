@@ -99,8 +99,6 @@ export class StudentController {
       dest: './uploads',
       fileFilter(req, file, callback) {
         const allowedMimeTypes = [
-          'image/jpg',
-          'image/jpeg',
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           'application/vnd.ms-excel',
         ];

@@ -34,7 +34,7 @@ export class Student {
   })
   date_of_birth: Date;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: null })
   photo: string;
 
   @Prop({ type: String, required: true, enum: ['male', 'female', 'other'] })

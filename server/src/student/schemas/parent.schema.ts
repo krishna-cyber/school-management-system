@@ -14,7 +14,7 @@ export class Parent {
   @Prop({ required: true })
   full_name: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: null })
   photo: string;
 
   @Prop({
