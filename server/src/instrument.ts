@@ -15,7 +15,7 @@ Sentry.init({
 
   beforeSendLog: (log) => {
     // Drop debug logs in production
-    if (log.level === 'debug' || log.level === 'info') {
+    if (log.level === 'debug') {
       return null;
     }
 

@@ -12,8 +12,28 @@ export type ClassDocument = HydratedDocument<Class, ClassDocumentOverride>;
   timestamps: true,
 })
 export class Class {
-  @Prop({ required: true, unique: true })
-  title: string;
+  @Prop({
+    required: true,
+    enum: [
+      'Nursery',
+      'L.K.G',
+      'U.K.G',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+    ],
+  })
+  level: string;
+
+  @Prop({ type: String, default: 'A' })
+  section: string;
 
   @Prop({ type: [SubjectSchema], required: true })
   compulsory_subjects: Subject[];
@@ -23,3 +43,5 @@ export class Class {
 }
 
 export const ClassSchema = SchemaFactory.createForClass(Class);
+
+ClassSchema.index({ level: 1, section: 1 }, { unique: true });

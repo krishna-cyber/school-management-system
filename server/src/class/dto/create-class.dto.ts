@@ -3,9 +3,9 @@ import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsOptional,
   IsString,
-  MaxLength,
   ValidateNested,
 } from 'class-validator';
 
@@ -27,12 +27,26 @@ class SubjectDto {
 
 export class CreateClassDto {
   @ApiProperty({
-    description: 'The title of the class',
-    example: 'Class 10',
+    description: 'The level of the class',
+    example: '10',
   })
   @IsString()
-  @MaxLength(70)
-  title: string;
+  @IsEnum([
+    'Nursery',
+    'L.K.G',
+    'U.K.G',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+  ])
+  level: string;
 
   @ApiProperty({
     description: 'The compulsory subjects for the class',
@@ -51,5 +65,5 @@ export class CreateClassDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => SubjectDto)
-  optional_subject: SubjectDto[];
+  optional_subjects: SubjectDto[];
 }

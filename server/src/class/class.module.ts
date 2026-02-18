@@ -15,5 +15,6 @@ import { Class, ClassSchema } from './schemas/class.schema';
   ],
   controllers: [ClassController],
   providers: [ClassService],
+  exports: [MongooseModule],
 })
 export class ClassModule {}

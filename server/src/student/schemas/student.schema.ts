@@ -35,7 +35,7 @@ export class Student {
   date_of_birth: Date;
 
   @Prop({ type: String, default: null })
-  photo: string;
+  photo: string | null;
 
   @Prop({ type: String, required: true, enum: ['male', 'female', 'other'] })
   gender: string;
@@ -46,7 +46,7 @@ export class Student {
     ref: Class.name,
     autopopulate: true,
   })
-  class: Types.ObjectId;
+  class: string;
 
   @Prop({ required: true, type: String })
   address: string;
@@ -68,7 +68,7 @@ export class Student {
       return age;
     },
   })
-  age: number;
+  age?: number;
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);

@@ -23,6 +23,8 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { extname } from 'node:path';
 
 @Controller('student')
 export class StudentController {
@@ -94,24 +96,7 @@ export class StudentController {
   }
 
   @Post('/import')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      dest: './uploads',
-      fileFilter(req, file, callback) {
-        const allowedMimeTypes = [
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          'application/vnd.ms-excel',
-        ];
-        if (!allowedMimeTypes.includes(file.mimetype)) {
-          return callback(
-            new BadRequestException('Only Excel files are allowed'),
-            false,
-          );
-        }
-        callback(null, true);
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   importStudents(@UploadedFile() file: Express.Multer.File) {
     return this.studentImportService.import(file);
   }

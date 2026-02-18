@@ -15,19 +15,19 @@ export class Parent {
   full_name: string;
 
   @Prop({ type: String, default: null })
-  photo: string;
+  photo: string | null;
 
   @Prop({
     type: String,
     required: true,
     enum: {
       values: [
-        'Teacher',
-        'Engineer',
-        'Doctor',
-        'Business',
-        'Agriculture',
-        'Other',
+        'teacher',
+        'engineer',
+        'doctor',
+        'business',
+        'agriculture',
+        'other',
       ],
       message:
         'Occupation must be one of: Teacher, Engineer, Doctor, Business, Agriculture, Other',
