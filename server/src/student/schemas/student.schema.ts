@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Parent, ParentSchema } from './parent.schema';
 import { Class } from 'src/class/schemas/class.schema';
+import { Fee } from 'src/fee/schemas/fee.schema';
 
 export type StudentDocumentOverride = {
   parent: Types.Subdocument<Types.ObjectId> & Parent;
@@ -44,7 +45,6 @@ export class Student {
     required: true,
     type: Types.ObjectId,
     ref: Class.name,
-    autopopulate: true,
   })
   class: string;
 
@@ -53,6 +53,9 @@ export class Student {
 
   @Prop({ type: ParentSchema, required: true })
   parent: Parent;
+
+  @Prop({ type: [Types.ObjectId], ref: Fee.name })
+  extra_fees?: string[];
 
   @Virtual({
     get: function (this: Student) {

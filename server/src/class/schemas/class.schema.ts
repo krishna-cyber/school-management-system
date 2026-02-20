@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Subject, SubjectSchema } from './subject.schema';
+import { Fee } from 'src/fee/schemas/fee.schema';
 
 export type ClassDocumentOverride = {
   subject: Subject;
@@ -40,6 +41,14 @@ export class Class {
 
   @Prop({ type: [SubjectSchema], default: [], unique: true })
   optional_subjects: Subject[];
+
+  @Prop({
+    required: true,
+    type: [Types.ObjectId],
+    ref: Fee.name,
+    default: [],
+  })
+  fees_associated: string[];
 }
 
 export const ClassSchema = SchemaFactory.createForClass(Class);

@@ -57,7 +57,9 @@ export class ImportParentDto {
 
   @IsOptional()
   @IsString()
-  @Type(() => String)
+  @Transform(({ value }) =>
+    value === null || value === undefined ? null : String(value),
+  )
   photo: string | null;
 
   @IsString()
@@ -78,6 +80,9 @@ export class ImportParentDto {
 
   @IsPhoneNumber(undefined, { each: true })
   @Transform(({ value }): string[] => {
+    if (value === null || value === undefined || value === '') {
+      return [];
+    }
     const phoneNumbers = String(value);
     return phoneNumbers.split('|').map((phone) => `+977${phone.trim()}`);
   })

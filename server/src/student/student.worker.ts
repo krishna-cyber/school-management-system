@@ -121,10 +121,11 @@ export class StudentProcessor extends WorkerHost {
       }
     }
 
-    await this.studentModel.insertMany(documents);
+    await this.studentModel.insertMany(documents, { ordered: false });
+
+    // Todo unlink the file after processing
 
     logger.info('Import job completed successfully', {
-      fileName: job.data?.fileName,
       fileSize: job.data?.fileSize,
       timestamp: job.data?.timestamp,
       totalRecords: studentDto.length,

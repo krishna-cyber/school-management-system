@@ -23,4 +23,8 @@ export class ExamService {
   remove(id: number) {
     return `This action removes a #${id} exam`;
   }
+
+  getExamLedger(id: number) {
+    return `This action returns the ledger for exam of class #${id}`;
+  }
 }

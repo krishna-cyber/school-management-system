@@ -24,7 +24,7 @@ export class StudentService {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid student ID format');
     }
-    return this.studentModel.findById(id);
+    return this.studentModel.findById(id).populate('class');
   }
 
   update(id: string, updateStudentDto: UpdateStudentDto) {

@@ -1,0 +1,54 @@
+meta {
+  name: mark-enter-of-student-by-id
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{base_url}}/exam/marks/6995d8ebd66e1a4112b3eb9b
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "student": "6995d8ebd66e1a4112b3eb9b",
+    "exam": "64f8a2c3d9e5f2b34c5d6789",
+    "class": "6995af2bfbfeba09545951d0",
+    "subjects": [
+      {
+        "subject_name": "Mathematics",
+        "total_marks": 100,
+        "pass_marks": 40,
+        "obtained_marks": 30,
+        "is_optional": false
+      },
+      {
+        "subject_name": "Science",
+        "total_marks": 100,
+        "pass_marks": 40,
+        "obtained_marks": 78,
+        "is_optional": false
+      },
+      {
+        "subject_name": "Nepali",
+        "total_marks": 100,
+        "pass_marks": 40,
+        "obtained_marks": 92,
+        "is_optional": false
+      },
+      {
+        "subject_name": "Art",
+        "total_marks": 50,
+        "pass_marks": 20,
+        "obtained_marks": 45,
+        "is_optional": true
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

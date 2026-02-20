@@ -16,17 +16,7 @@ import { ClassModule } from 'src/class/class.module';
     ClassModule,
     BullModule.registerQueue({ name: 'importQueue' }),
     //only register the student schema, the parent and contact schemas are used as subdocuments in the student schema
-    MongooseModule.forFeatureAsync([
-      {
-        name: Student.name,
-        useFactory: () => {
-          const schema = StudentSchema;
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          schema.plugin(require('mongoose-autopopulate'));
-          return schema;
-        },
-      },
-    ]),
+    MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }]),
 
     MulterModule.register({
       limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
@@ -57,5 +47,6 @@ import { ClassModule } from 'src/class/class.module';
   ],
   controllers: [StudentController],
   providers: [StudentService, StudentDataTransferService, StudentProcessor],
+  exports: [MongooseModule],
 })
 export class StudentModule {}

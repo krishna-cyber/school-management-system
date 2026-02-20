@@ -1,0 +1,173 @@
+<body>
+  <div class="date">{{date}}</div>
+  <div class="logo"><img height="100px" width="100px" src="./logo.png"/></div>
+  <div class="title">
+<h2 >{{schoolName}}</h2>
+<p>{{schoolAddress}}</p>
+  </div>
+  <div class="examination">
+    <strong>{{examTitle}}-{{examYear}}</strong>
+  </div>
+
+<div class="information">
+<span><strong>Student:</strong>{{studentName}}</span>
+<span><strong>Class:</strong> {{class}}</span>
+<span><strong>Roll no:</strong> {{rollNumber}}</span>
+<span><strong>Section:</strong> {{section}}</span>
+</div>
+
+  <u class="gradesheet-title"><h4>Grade Sheet</h4>  </u>
+<table class="gradesheet-table"  border="1" cellpadding="5" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>S.N</th>
+      <th>Subject</th>
+      <th>Full Marks</th>
+      <th>Pass Marks</th>
+      <th>Obtained Marks</th>
+      <th>Remark</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td>1</td>
+        <td>Mathematics</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+     <tr>
+        <td>2</td>
+        <td>Nepali</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+     <tr>
+        <td>3</td>
+        <td>English</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+     <tr>
+        <td>4</td>
+        <td>Science</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+     <tr>
+        <td>5</td>
+        <td>Social Studies</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+     <tr>
+        <td>6</td>
+        <td>Computer Science</td>
+        <td>100</td>
+        <td>40</td>
+        <td>75</td>
+        <td>Pass</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="4"><strong>Total Obtained:</strong></td>
+      <td colspan="2">{{totalObtained}}</td>
+    </tr>
+  </tfoot>
+</table>
+
+
+<p class="percentage"><strong>Percentage:</strong> {{percentage}}%</p>
+<p class="result"><strong>Result:</strong> {{result}}</p>
+<p class="remark"><strong>Remarks:</strong> {{remarks}}</p>
+<div class="footer">
+  <span>
+    _________________<br/>
+    Guardian Signature
+  </span>
+  <span>_
+  ________________<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; Class Teacher
+  </span>
+  <span>
+  _________________<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Principal
+  </span>
+</div>
+</body>
+
+<style>
+  body{
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 2px solid #000;
+  }
+  .date{
+    text-align: right;
+    font-size: smaller;
+  }
+  .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .title{
+    line-height: 0.5;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .examination{
+    text-align: center;
+    font-size: larger;
+    margin-bottom: 20px;
+  }
+  .information{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .gradesheet-title{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: medium;
+  }
+  .gradesheet-table{
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  td,th{
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+    height: 50px;
+  }
+  
+  .percentage{;
+    border: 2px solid #000;
+    font-size: larger;
+    font-weight: bold;
+    width: fit-content  ;
+    padding: 5px 10px;
+    margin-left: auto;
+  }
+  .footer {
+  position: fixed;
+  bottom: 30;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+}
+</style>
