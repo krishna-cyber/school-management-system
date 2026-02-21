@@ -1,0 +1,140 @@
+<body>
+  <div class="date">Date:&nbsp;{{date}}</div>
+  <div class="logo"><img height="100px" width="100px" src="data:image/png;base64,{{logo}}" /></div>
+
+ <div class="title">
+<h2 >{{schoolName}}</h2>
+<p>{{schoolAddress}}&nbsp;|&nbsp;{{schoolContact}}</p>
+  </div>
+    <div class="invoice">
+        <span><strong>Invoice no:</strong> &nbsp;{{invoiceNumber}}</span><span><strong>PAN:</strong> &nbsp;
+        {{#each panNumber}}<span class="invoice-box">{{this}}</span>{{/each}}</span>
+    </div>
+
+<div class="information">
+<span><strong>Student:</strong>{{studentName}}</span>
+<span><strong>Class:</strong> {{class}}</span>
+<span><strong>Roll no:</strong> {{rollNumber}}</span>
+<span><strong>Section:</strong> {{section}}</span>
+</div>
+
+  <u class="invoice-title"><h4>Receipt</h4></u>
+<table class="gradesheet-table"  border="1" cellpadding="5" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>S.N</th>
+      <th>Particulars</th>
+      <th>Amount</th>
+      <th>Remark</th>
+    </tr>
+  </thead>
+  <tbody>
+
+{{#each invoices}}
+<tr>
+  <td>{{inc @index}}</td>
+  <td>{{this.description}}</td>
+  <td>{{this.amount}}</td>
+  <td>{{this.remark}}</td>
+</tr>
+{{/each}}
+
+
+    
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2"><strong>Total:</strong></td>
+      <td colspan="2">{{totalAmount}}</td>
+    </tr>
+  </tfoot>
+</table>
+<u>{{amountInWords}}</u>
+
+
+
+<div class="footer">
+  <span>
+  _________________<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Verified by
+  </span>
+  
+</div>
+<span class="page-number">page {{pageNumber}} of {{totalPages}}</span>
+</body>
+
+<style>
+  body{
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 2px solid #000;
+  }
+  .date{
+    text-align: right;
+    font-size: smaller;
+  }
+  .logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .title{
+    line-height: 0.5;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .invoice{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .invoice-box{
+    border: 1px solid #000;
+    padding: 2px 5px;
+    margin-left: 5px;
+  }
+  .examination{
+    text-align: center;
+    font-size: larger;
+    margin-bottom: 20px;
+  }
+  .information{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .invoice-title{
+    text-align: center;
+    font-size: large;
+  }
+  .gradesheet-table{
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  td,th{
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+    height: 50px;
+  }
+
+  .footer {
+  position: fixed;
+  bottom: 30;
+  left: auto;
+  right: 20px;;
+  display: flex;
+  justify-content: space-around;
+}
+
+.page-number {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: xx-small;
+}
+</style>

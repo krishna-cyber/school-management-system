@@ -34,10 +34,11 @@ export class MarksheetWorker extends WorkerHost {
     const marksheet = job.data as MarksheetJobData;
     const templatePath = path.join(
       __dirname,
-      './templates/marksheet-template.hbs',
+      '../templates/marksheet.template.hbs',
     );
+
     const imageBase64 = fs.readFileSync(
-      './src/exam/templates/logo.png',
+      path.join(__dirname, '../templates/logo.png'),
       'base64',
     );
 

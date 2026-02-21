@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { FeeService } from './fee.service';
 import { CreateFeeDto } from './dto/create-fee.dto';
 import { UpdateFeeDto } from './dto/update-fee.dto';
@@ -103,5 +105,19 @@ export class FeeController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.feeService.remove(id);
+  }
+
+  @Get('generate-invoice/:studentId')
+  async generateInvoice(
+    @Param('studentId') studentId: string,
+    @Res() res: Response,
+  ) {
+    const invoice = await this.feeService.generateInvoice(studentId);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="invoice-${studentId}.pdf"`,
+      'Content-Length': invoice.length,
+    });
+    res.end(invoice);
   }
 }
