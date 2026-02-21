@@ -17,7 +17,7 @@ export class SubjectMarkDto {
   @IsNumber()
   @IsPositive()
   @Max(100)
-  total_marks: number;
+  full_marks: number;
 
   @IsNumber()
   @IsPositive()

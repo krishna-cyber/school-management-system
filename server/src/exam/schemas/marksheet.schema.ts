@@ -11,7 +11,7 @@ export class SubjectMark {
   @Prop({ type: String, required: true })
   subject_name: string;
   @Prop({ type: Number, required: true })
-  total_marks: number;
+  full_marks: number;
   @Prop({ type: Number, required: true })
   pass_marks: number;
   @Prop({ type: Number, required: true })
@@ -66,7 +66,7 @@ MarksheetSchema.pre('save', function () {
   }, 0);
 
   const total_marks = this.subjects.reduce((acc, subject) => {
-    return acc + subject.total_marks;
+    return acc + subject.full_marks;
   }, 0);
 
   const percentage = (this.obtained_marks / total_marks) * 100;

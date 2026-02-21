@@ -9,20 +9,13 @@ import * as puppeteer from 'puppeteer';
 import path from 'node:path';
 import fs from 'node:fs';
 
-interface MarksheetTemplateData {
-  date: string;
-  schoolName: string;
-  schoolAddress: string;
-  examTitle: string;
-  examYear: string;
-  studentName: string;
-  class: string;
-  rollNumber: string;
-  section: string;
-  percentage: number;
-  totalObtained: number;
-  result: string;
-  remarks: string;
+interface MarksheetPopulated extends Omit<Marksheet, 'student' | 'class'> {
+  student: {
+    full_name: string;
+  };
+  class: {
+    level: string;
+  };
 }
 
 @Injectable()
@@ -68,7 +61,7 @@ export class MarksService {
       .findOne({ student: id })
       .lean()
       .populate('student', 'full_name ,-_id')
-      .populate('class', 'level ,-_id');
+      .populate<MarksheetPopulated>('class', 'level ,-_id');
 
     if (!marksheet) {
       throw new BadRequestException('Marksheet not found');
@@ -89,44 +82,59 @@ export class MarksService {
       .findOne({ student: id })
       .lean()
       .populate('student', 'full_name ,-_id')
-      .populate('class', 'level ,-_id');
+      .populate<MarksheetPopulated>('class', 'level ,-_id');
 
     const templatePath = path.join(
       __dirname,
       './templates/marksheet-template.hbs',
     );
+    const imageBase64 = fs.readFileSync(
+      './src/exam/templates/logo.png',
+      'base64',
+    );
 
-    const templateData: MarksheetTemplateData = {
-      date: new Date().toISOString().split('T')[0],
-      schoolName: 'Durga Laxmi Model School',
-      schoolAddress: 'Godawari-04, Attariya, Kailali',
-      examTitle: 'Final Exam',
-      examYear: '2082',
-      studentName: 'KRISHNA TIWARI',
-      class: '10',
-      rollNumber: '1',
-      section: 'A',
-      percentage: 0,
-      totalObtained: 0,
-      result: 'Pass',
-      remarks: 'Congratulations!',
-    };
+    console.log('Marksheet data:', marksheet);
 
-    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+    if (marksheet) {
+      const templateData = {
+        date: new Date().toISOString().split('T')[0],
+        schoolName: 'Durga Laxmi Model School',
+        schoolAddress: 'Godawari-04, Attariya, Kailali',
+        logo: imageBase64,
+        examTitle: 'Final Exam',
+        subjects: marksheet.subjects,
+        examYear: '2082',
+        studentName: marksheet.student.full_name.toUpperCase(),
+        class: marksheet.class.level,
+        rollNumber: '1',
+        section: 'A',
+        percentage: marksheet.percentage?.toFixed(2),
+        totalObtained: marksheet.obtained_marks,
+        result: marksheet.is_pass ? 'Pass' : 'Fail',
+        remarks: marksheet.remarks,
+      };
 
-    const template = Handlebars.compile(templateContent);
+      const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
-    const html = template(templateData);
+      const template = Handlebars.compile(templateContent);
+      Handlebars.registerHelper('inc', function (value: number): number {
+        return value + 1;
+      });
 
-    const browser = await puppeteer.launch({ headless: true });
+      const html = template(templateData);
 
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+      const browser = await puppeteer.launch({ headless: true });
 
-    const pdfBuffer = await page.pdf({ format: 'A4' });
+      const page = await browser.newPage();
+      await page.setContent(html, { waitUntil: 'networkidle0' });
 
-    await browser.close();
+      const pdfBuffer = await page.pdf({ format: 'A4' });
 
-    return pdfBuffer;
+      await browser.close();
+
+      return pdfBuffer;
+    } else {
+      throw new BadRequestException('Marksheet not found');
+    }
   }
 }

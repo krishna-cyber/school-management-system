@@ -60,9 +60,9 @@ export class ExamController {
     return this.marksService.getMarksheet(id);
   }
 
-  @Get('/preview/:id')
+  @Get('/preview/:studentId')
   async previewMarksheet(
-    @Param('id') id: string,
+    @Param('studentId') id: string,
     @Res() res: express.Response,
   ) {
     const marksheet = await this.marksService.previewMarksheet(id);

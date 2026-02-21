@@ -1,6 +1,6 @@
 <body>
   <div class="date">{{date}}</div>
-  <div class="logo"><img height="100px" width="100px" src="./logo.png"/></div>
+  <div class="logo"><img height="100px" width="100px" src="data:image/png;base64,{{logo}}" /></div>
   <div class="title">
 <h2 >{{schoolName}}</h2>
 <p>{{schoolAddress}}</p>
@@ -29,54 +29,27 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-        <td>1</td>
-        <td>Mathematics</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
-     <tr>
-        <td>2</td>
-        <td>Nepali</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
-     <tr>
-        <td>3</td>
-        <td>English</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
-     <tr>
-        <td>4</td>
-        <td>Science</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
-     <tr>
-        <td>5</td>
-        <td>Social Studies</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
-     <tr>
-        <td>6</td>
-        <td>Computer Science</td>
-        <td>100</td>
-        <td>40</td>
-        <td>75</td>
-        <td>Pass</td>
-    </tr>
+
+{{#each subjects}}
+<tr>
+  <td>{{inc @index}}</td>
+  <td>{{this.subject_name}}</td>
+  <td>{{this.full_marks}}</td>
+  <td>{{this.pass_marks}}</td>
+  <td>{{this.obtained_marks}} {{#if this.is_pass}}
+  {{else}}
+   *
+  {{/if}}</td>
+  <td>{{#if this.is_pass}}
+    Pass
+  {{else}}
+    Fail
+  {{/if}}</td>
+</tr>
+{{/each}}
+
+
+    
   </tbody>
   <tfoot>
     <tr>
