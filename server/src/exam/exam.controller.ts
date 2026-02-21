@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Res,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { CreateExamDto } from './dto/create-exam.dto';
@@ -14,6 +16,7 @@ import { UpdateExamDto } from './dto/update-exam.dto';
 import { MarksService } from './marks.service';
 import { CreateMarkSheetDto } from './dto/create-marksheet.dto';
 import express from 'express';
+import { GenerateMarksheetDto } from './dto/generate-marksheet.dto';
 
 @Controller('exam')
 export class ExamController {
@@ -48,28 +51,36 @@ export class ExamController {
   }
 
   @Post('/marks/:id')
-  generate(
+  createMarksheet(
     @Param('id') id: string,
     @Body() createMarkSheetDto: CreateMarkSheetDto,
   ) {
-    return this.marksService.generateMarkSheet(id, createMarkSheetDto);
+    return this.marksService.saveMarksheet(id, createMarkSheetDto);
   }
 
-  @Get('/marks/:id')
-  getMarksheet(@Param('id') id: string) {
-    return this.marksService.getMarksheet(id);
+  @Get('/marks/:studentId')
+  getMarksheet(@Param('studentId') studentId: string) {
+    return this.marksService.getMarksheet(studentId);
   }
 
-  @Get('/preview/:studentId')
+  @Get('/generate/marksheet')
+  generateMarksheet(
+    @Query(new ValidationPipe({ transform: true }))
+    query: GenerateMarksheetDto,
+  ) {
+    return this.marksService.generateMarksheet(query.studentId, query.examId);
+  }
+
+  @Get('/preview/:jobId')
   async previewMarksheet(
-    @Param('studentId') id: string,
+    @Param('jobId') id: string,
     @Res() res: express.Response,
   ) {
     const marksheet = await this.marksService.previewMarksheet(id);
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="marksheet-krishna.pdf"`,
+      'Content-Disposition': `attachment; filename="marksheet-${id}.pdf"`,
       'Content-Length': marksheet.length,
     });
 

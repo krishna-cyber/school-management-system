@@ -17,6 +17,8 @@ import { FeeModule } from './fee/fee.module';
 import configuration from './config/configuration';
 import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bullmq';
+import { CacheModule } from '@nestjs/cache-manager';
+import { createKeyv } from '@keyv/redis';
 
 @Module({
   imports: [
@@ -65,11 +67,22 @@ import { BullModule } from '@nestjs/bullmq';
           host: configService.get('redis.host'),
           port: configService.get('redis.port'),
         },
-        defaultJobOptions: { removeOnComplete: true, attempts: 3 },
+        defaultJobOptions: { attempts: 3 },
       }),
       inject: [ConfigService],
     }),
-    BullModule.registerQueue({ name: 'importQueue' }, { name: 'invoiceQueue' }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: (configService: ConfigService) => ({
+        ttl: seconds(300), // default cache TTL of 5 minutes
+        stores: [
+          createKeyv(
+            `redis://${configService.get('redis.host')}:${configService.get('redis.port')}`,
+          ),
+        ],
+      }),
+      inject: [ConfigService],
+    }),
     StudentModule,
     TeacherModule,
     AnalyticsModule,

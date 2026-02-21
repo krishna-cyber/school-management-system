@@ -52,6 +52,9 @@ export class Marksheet {
 
 export const MarksheetSchema = SchemaFactory.createForClass(Marksheet);
 
+//prevents a student from having multiple marksheets for the same exam, as a student can only take an exam once.
+MarksheetSchema.index({ student: 1, exam: 1 }, { unique: true });
+
 MarksheetSchema.pre('save', function () {
   this.subjects.forEach((subject) => {
     if (subject.obtained_marks > subject.pass_marks) {

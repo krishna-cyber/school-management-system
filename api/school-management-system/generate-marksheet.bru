@@ -1,0 +1,21 @@
+meta {
+  name: generate-marksheet
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{base_url}}/exam/generate/marksheet?studentId=6995d8ebd66e1a4112b3eb9b&examId=64f8a2c3d9e5f2b34c5d6789
+  body: json
+  auth: inherit
+}
+
+params:query {
+  studentId: 6995d8ebd66e1a4112b3eb9b
+  examId: 64f8a2c3d9e5f2b34c5d6789
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

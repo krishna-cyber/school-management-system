@@ -8,7 +8,6 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import {
@@ -23,8 +22,6 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import { extname } from 'node:path';
 
 @Controller('student')
 export class StudentController {

@@ -1,22 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Student } from 'src/student/schemas/student.schema';
 import { CreateMarkSheetDto } from './dto/create-marksheet.dto';
 import { Marksheet } from './schemas/marksheet.schema';
-import * as Handlebars from 'handlebars';
-import * as puppeteer from 'puppeteer';
-import path from 'node:path';
-import fs from 'node:fs';
-
-interface MarksheetPopulated extends Omit<Marksheet, 'student' | 'class'> {
-  student: {
-    full_name: string;
-  };
-  class: {
-    level: string;
-  };
-}
+import { Queue } from 'bullmq';
+import { InjectQueue } from '@nestjs/bullmq';
+import { MarksheetJobData } from './exam.worker';
+import type { Cache } from 'cache-manager';
 
 @Injectable()
 export class MarksService {
@@ -24,8 +15,11 @@ export class MarksService {
     @InjectModel(Student.name) private readonly studentModel: Model<Student>,
     @InjectModel(Marksheet.name)
     private readonly marksheetModel: Model<Marksheet>,
+    @InjectQueue('marksheetGeneration')
+    private readonly marksheetQueue: Queue,
+    @Inject('CACHE_MANAGER') private readonly cacheManager: Cache,
   ) {}
-  async generateMarkSheet(id: string, createMarkSheetDto: CreateMarkSheetDto) {
+  async saveMarksheet(id: string, createMarkSheetDto: CreateMarkSheetDto) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid student ID');
     }
@@ -53,6 +47,28 @@ export class MarksService {
     };
   }
 
+  async generateMarksheet(studentId: string, examId: string) {
+    const marksheet = await this.marksheetModel
+      .findOne({ student: studentId, exam: examId })
+      .lean()
+      .populate('student', 'full_name ,-_id')
+      .populate('class', 'level ,-_id');
+
+    if (!marksheet) {
+      throw new BadRequestException(
+        'Marksheet not found for the given student and exam',
+      );
+    }
+
+    const job = await this.marksheetQueue.add('marksheetGeneration', marksheet);
+
+    return {
+      success: true,
+      message: 'Marksheet generation job has been added.',
+      jobId: job.id,
+    };
+  }
+
   async getMarksheet(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid marksheet ID');
@@ -61,7 +77,7 @@ export class MarksService {
       .findOne({ student: id })
       .lean()
       .populate('student', 'full_name ,-_id')
-      .populate<MarksheetPopulated>('class', 'level ,-_id');
+      .populate('class', 'level ,-_id');
 
     if (!marksheet) {
       throw new BadRequestException('Marksheet not found');
@@ -69,72 +85,30 @@ export class MarksService {
 
     return {
       success: true,
+      message: 'Marksheet retrieved successfully',
       data: marksheet,
     };
   }
 
   async previewMarksheet(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('Invalid marksheet ID');
+    const job = await this.marksheetQueue.getJob(id);
+
+    if (!job || !(await job.isCompleted())) {
+      throw new BadRequestException('Job not found or not completed yet');
     }
 
-    const marksheet = await this.marksheetModel
-      .findOne({ student: id })
-      .lean()
-      .populate('student', 'full_name ,-_id')
-      .populate<MarksheetPopulated>('class', 'level ,-_id');
+    const jobData = job.data as MarksheetJobData;
 
-    const templatePath = path.join(
-      __dirname,
-      './templates/marksheet-template.hbs',
-    );
-    const imageBase64 = fs.readFileSync(
-      './src/exam/templates/logo.png',
-      'base64',
+    const marksheet = await this.cacheManager.get<Uint8Array>(
+      `marksheet:${jobData.student.full_name}:${jobData.class.level}:${jobData.exam}`,
     );
 
-    console.log('Marksheet data:', marksheet);
-
-    if (marksheet) {
-      const templateData = {
-        date: new Date().toISOString().split('T')[0],
-        schoolName: 'Durga Laxmi Model School',
-        schoolAddress: 'Godawari-04, Attariya, Kailali',
-        logo: imageBase64,
-        examTitle: 'Final Exam',
-        subjects: marksheet.subjects,
-        examYear: '2082',
-        studentName: marksheet.student.full_name.toUpperCase(),
-        class: marksheet.class.level,
-        rollNumber: '1',
-        section: 'A',
-        percentage: marksheet.percentage?.toFixed(2),
-        totalObtained: marksheet.obtained_marks,
-        result: marksheet.is_pass ? 'Pass' : 'Fail',
-        remarks: marksheet.remarks,
-      };
-
-      const templateContent = fs.readFileSync(templatePath, 'utf-8');
-
-      const template = Handlebars.compile(templateContent);
-      Handlebars.registerHelper('inc', function (value: number): number {
-        return value + 1;
-      });
-
-      const html = template(templateData);
-
-      const browser = await puppeteer.launch({ headless: true });
-
-      const page = await browser.newPage();
-      await page.setContent(html, { waitUntil: 'networkidle0' });
-
-      const pdfBuffer = await page.pdf({ format: 'A4' });
-
-      await browser.close();
-
-      return pdfBuffer;
-    } else {
-      throw new BadRequestException('Marksheet not found');
+    if (!marksheet) {
+      throw new BadRequestException('Marksheet not found in cache');
     }
+
+    return Buffer.isBuffer(marksheet)
+      ? marksheet
+      : Buffer.from(Object.values(marksheet));
   }
 }

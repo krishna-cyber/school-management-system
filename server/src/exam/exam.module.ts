@@ -5,15 +5,20 @@ import { MarksService } from './marks.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Student, StudentSchema } from 'src/student/schemas/student.schema';
 import { Marksheet, MarksheetSchema } from './schemas/marksheet.schema';
+import { BullModule } from '@nestjs/bullmq';
+import { MarksheetWorker } from './exam.worker';
+import { Class, ClassSchema } from 'src/class/schemas/class.schema';
 
 @Module({
   imports: [
+    BullModule.registerQueue({ name: 'marksheetGeneration' }),
     MongooseModule.forFeature([
       { name: Student.name, schema: StudentSchema },
       { name: Marksheet.name, schema: MarksheetSchema },
+      { name: Class.name, schema: ClassSchema },
     ]),
   ],
   controllers: [ExamController],
-  providers: [ExamService, MarksService],
+  providers: [ExamService, MarksService, MarksheetWorker],
 })
 export class ExamModule {}
