@@ -11,14 +11,14 @@ import { Model } from 'mongoose';
 import { Class } from 'src/class/schemas/class.schema';
 import { logger } from '@sentry/nestjs';
 
-interface ImportJobData {
+export interface ImportJobData {
   filePath: string;
   fileName: string;
   fileSize: number;
   timestamp: Date;
 }
 
-@Processor('importQueue', { concurrency: 5 })
+@Processor('teacherImportQueue', { concurrency: 5 })
 export class StudentProcessor extends WorkerHost {
   constructor(
     @InjectModel(Student.name) private readonly studentModel: Model<Student>,

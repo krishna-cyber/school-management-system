@@ -1,0 +1,84 @@
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Job } from 'bullmq';
+import { readFile, utils } from 'xlsx';
+import { ImportJobData } from 'src/student/student.worker';
+import { BadRequestException } from '@nestjs/common';
+import { ImportTeacherDto } from './dto/import-teachet.dto';
+import { plainToInstance } from 'class-transformer';
+import { validate, ValidationError } from 'class-validator';
+import { Teacher } from './schemas/teacher.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { logger } from '@sentry/nestjs';
+
+@Processor('teacherImportQueue', { concurrency: 5 })
+export class TeacherProcessor extends WorkerHost {
+  constructor(
+    @InjectModel(Teacher.name) private readonly teacherModel: Model<Teacher>,
+  ) {
+    super();
+  }
+  async process(job: Job<ImportJobData>) {
+    const workbook = readFile(job.data?.filePath);
+    const teacherSheet = workbook.Sheets['teachers'];
+
+    const teacherData = utils.sheet_to_json(teacherSheet, {
+      header: [
+        'full_name',
+        'gender',
+        'salary',
+        'phone_number',
+        'email',
+        'photo',
+        'qualification',
+      ],
+      range: 1, //skip the header row
+      defval: null, //set default value for empty cells to null
+    });
+
+    if (!teacherSheet || teacherData.length === 0) {
+      throw new BadRequestException(
+        'verify the excel file once for required format and data consistency',
+      );
+    }
+
+    const teacherDto = plainToInstance(ImportTeacherDto, teacherData, {
+      enableImplicitConversion: true,
+    });
+
+    const errors: ValidationError[] = [];
+    const documents: Teacher[] = [];
+
+    for (const element of teacherDto) {
+      const teacherError = await validate(element, {
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      });
+      if (teacherError.length > 0) {
+        errors.push(...teacherError);
+      } else {
+        documents.push({
+          full_name: element.full_name,
+          gender: element.gender,
+          salary: element.salary,
+          photo: element.photo,
+          qualification: element.qualification,
+          contact: {
+            phone_number: element.phone_number.split('|'),
+            email: element.email.split('|'),
+          },
+        });
+      }
+
+      await this.teacherModel.insertMany(documents, { ordered: false });
+
+      logger.info('Import job completed successfully', {
+        fileSize: job.data?.fileSize,
+        timestamp: job.data?.timestamp,
+        totalRecords: teacherDto.length,
+        successfulInserts: documents.length,
+        validationErrors: errors,
+      });
+    }
+  }
+}

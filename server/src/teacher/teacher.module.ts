@@ -4,6 +4,8 @@ import { TeacherController } from './teacher.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Teacher, TeacherSchema } from './schemas/teacher.schema';
 import { TeacherDataTransferService } from './teacher-data-transfer.service';
+import { TeacherProcessor } from './teacher.worker';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { TeacherDataTransferService } from './teacher-data-transfer.service';
         schema: TeacherSchema,
       },
     ]),
+    BullModule.registerQueue({ name: 'teacherImportQueue' }),
   ],
   controllers: [TeacherController],
-  providers: [TeacherService, TeacherDataTransferService],
+  providers: [TeacherService, TeacherDataTransferService, TeacherProcessor],
 })
 export class TeacherModule {}
