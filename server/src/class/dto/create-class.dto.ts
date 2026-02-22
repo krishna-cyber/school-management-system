@@ -48,6 +48,13 @@ export class CreateClassDto {
   ])
   level: string;
 
+  @IsString()
+  @ApiProperty({
+    description: 'The section of the class',
+    example: 'A',
+  })
+  section: string;
+
   @ApiProperty({
     description: 'The compulsory subjects for the class',
     type: [SubjectDto],

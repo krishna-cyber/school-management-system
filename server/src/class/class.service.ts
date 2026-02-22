@@ -4,11 +4,14 @@ import { UpdateClassDto } from './dto/update-class.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Class } from './schemas/class.schema';
 import mongoose, { Model, Types } from 'mongoose';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class ClassService {
   constructor(
     @InjectModel(Class.name) private readonly classModel: Model<Class>,
+    @InjectQueue('classImportQueue') private readonly importQueue: Queue,
   ) {}
   async create(createClassDto: CreateClassDto) {
     try {
@@ -62,5 +65,14 @@ export class ClassService {
     await this.classModel.findByIdAndDelete(id);
 
     return { success: true, message: 'Class deleted successfully' };
+  }
+
+  async importFromExcel(file: Express.Multer.File) {
+    await this.importQueue.add('classImportQueue', { filePath: file.path });
+    // This method will be implemented in the future to handle the import of class data from an Excel file.
+    return {
+      success: true,
+      message: 'Class import from Excel initiated successfully',
+    };
   }
 }

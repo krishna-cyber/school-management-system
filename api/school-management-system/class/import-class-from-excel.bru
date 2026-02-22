@@ -1,0 +1,20 @@
+meta {
+  name: import-class-from-excel
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/class/import
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(C:\Users\Krishna Tiwari\Downloads\class-import.xlsx)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

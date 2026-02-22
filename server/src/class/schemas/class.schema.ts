@@ -39,16 +39,15 @@ export class Class {
   @Prop({ type: [SubjectSchema], required: true })
   compulsory_subjects: Subject[];
 
-  @Prop({ type: [SubjectSchema], default: [], unique: true })
+  @Prop({ type: [SubjectSchema], default: [] })
   optional_subjects: Subject[];
 
   @Prop({
-    required: true,
     type: [Types.ObjectId],
     ref: Fee.name,
     default: [],
   })
-  fees_associated: string[];
+  fees_associated?: string[];
 }
 
 export const ClassSchema = SchemaFactory.createForClass(Class);

@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
@@ -15,6 +17,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 
 @Controller('class')
 export class ClassController {
@@ -104,5 +107,11 @@ export class ClassController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.classService.remove(id);
+  }
+
+  @Post('import')
+  @UseInterceptors(FileInterceptor('file'))
+  importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    return this.classService.importFromExcel(file);
   }
 }
