@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Res,
+  Query,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { FeeService } from './fee.service';
@@ -43,8 +44,8 @@ export class FeeController {
   }
 
   @Get()
-  findAll() {
-    return this.feeService.findAll();
+  findAll(@Query('studentId') studentId?: string) {
+    return this.feeService.findAll(studentId);
   }
 
   @ApiOperation({ summary: 'Get a Fee by ID' })

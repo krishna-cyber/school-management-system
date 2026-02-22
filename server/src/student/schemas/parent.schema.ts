@@ -8,7 +8,7 @@ export type ParentDocumentOverride = {
 export type ParentDocument = HydratedDocument<Parent, ParentDocumentOverride>;
 
 @Schema({
-  timestamps: true,
+  _id: false,
 })
 export class Parent {
   @Prop({ required: true })

@@ -159,6 +159,15 @@ export class CreateStudentDto {
   @ValidateNested()
   @Type(() => ParentDto)
   parent: ParentDto;
+
+  @ApiPropertyOptional({
+    description: 'The extra fees ids associated with the student',
+    example: ['60c72b2f9b1d8e5a5c8f9b1d', '60c72b2f9b1d8e5a5c8f9b1e'],
+  })
+  @IsArray()
+  @IsMongoId({ each: true })
+  @Type(() => Types.ObjectId)
+  extra_fees?: string[];
 }
 
 export class CreateStudentResponseDto {

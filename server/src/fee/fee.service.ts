@@ -8,6 +8,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import * as Handlebars from 'handlebars';
 import * as puppeteer from 'puppeteer';
+import { Student } from 'src/student/schemas/student.schema';
 
 interface Invoice {
   date: string;
@@ -30,7 +31,10 @@ interface Invoice {
 
 @Injectable()
 export class FeeService {
-  constructor(@InjectModel(Fee.name) private readonly feeModel: Model<Fee>) {}
+  constructor(
+    @InjectModel(Fee.name) private readonly feeModel: Model<Fee>,
+    @InjectModel(Student.name) private readonly studentModel: Model<Student>,
+  ) {}
   async create(createFeeDto: CreateFeeDto) {
     const createdFee = new this.feeModel(createFeeDto);
     await createdFee.save();
@@ -40,8 +44,41 @@ export class FeeService {
     };
   }
 
-  findAll() {
-    return `This action returns all fee`;
+  async findAll(studentId?: string) {
+    if (studentId) {
+      const student = await this.studentModel
+        .findById(studentId)
+        .populate({
+          path: 'class',
+          populate: {
+            path: 'fees_associated',
+            model: Fee.name,
+          },
+        })
+        .populate('extra_fees');
+
+      if (!student) {
+        throw new BadRequestException('Student not found');
+      }
+      const associatedFees = [
+        ...new Set([
+          ...(student.class?.fees_associated || []),
+          ...(student.extra_fees || []),
+        ]),
+      ];
+
+      return {
+        success: true,
+        message: 'Fees for the student retrieved successfully',
+        data: associatedFees,
+      };
+    }
+
+    return {
+      success: true,
+      message: 'All fees retrieved successfully',
+      data: await this.feeModel.find().sort({ createdAt: -1 }),
+    };
   }
 
   findOne(id: string) {

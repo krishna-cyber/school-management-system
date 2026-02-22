@@ -27,12 +27,17 @@ export class StudentService {
     return this.studentModel.findById(id).populate('class');
   }
 
-  update(id: string, updateStudentDto: UpdateStudentDto) {
+  async update(id: string, updateStudentDto: UpdateStudentDto) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid student ID format');
     }
+    const student = await this.studentModel.findById(id);
+    if (!student) {
+      throw new BadRequestException('Student not found');
+    }
+
     return this.studentModel.findByIdAndUpdate(id, updateStudentDto, {
-      new: true,
+      returnDocument: 'after',
     });
   }
 

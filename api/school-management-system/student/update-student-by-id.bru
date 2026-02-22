@@ -1,11 +1,11 @@
 meta {
   name: update-student-by-id
   type: http
-  seq: 10
+  seq: 1
 }
 
 patch {
-  url: {{base_url}}/student/6992fa3cff4a7b633cfe6209
+  url: {{base_url}}/student/6995d8ebd66e1a4112b3eb9b
   body: json
   auth: inherit
 }
@@ -27,7 +27,8 @@ body:json {
         "phone_number": ["+9779868880218"],
         "email": ["hari@example.com", "hari2@example.com"]
       }
-    }
+    },
+    "extra_fees":["6992d001c42c68af6d5594dc","6992d40212d517ebcd49e35b"]
   }
 }
 

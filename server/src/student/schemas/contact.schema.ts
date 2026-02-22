@@ -5,7 +5,6 @@ export type ContactDocument = HydratedDocument<Contact>;
 
 @Schema({
   _id: false,
-  timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 })

@@ -17,6 +17,8 @@ export type StudentDocument = HydratedDocument<
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
+  id: false,
+  versionKey: false,
 })
 export class Student {
   @Prop({ required: true })
