@@ -1,4 +1,9 @@
-import { BadRequestException, Module } from '@nestjs/common';
+import {
+  BadRequestException,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { StudentService } from './student.service';
 import { StudentController } from './student.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,6 +15,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'node:path';
 import { ClassModule } from 'src/class/class.module';
+import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
 
 @Module({
   imports: [
@@ -49,4 +55,8 @@ import { ClassModule } from 'src/class/class.module';
   providers: [StudentService, StudentDataTransferService, StudentProcessor],
   exports: [MongooseModule],
 })
-export class StudentModule {}
+export class StudentModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TenantsMiddleware).forRoutes(StudentController);
+  }
+}
