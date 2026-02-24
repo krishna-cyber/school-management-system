@@ -19,6 +19,7 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bullmq';
 import { CacheModule } from '@nestjs/cache-manager';
 import { createKeyv } from '@keyv/redis';
+import { TenantModule } from './tenant/tenant.module';
 
 @Module({
   imports: [
@@ -89,6 +90,7 @@ import { createKeyv } from '@keyv/redis';
     ExamModule,
     ClassModule,
     FeeModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [

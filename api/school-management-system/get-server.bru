@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}
+  url: {{base_url}}/product
   body: none
   auth: inherit
+}
+
+headers {
+  x-tenant-id: DLHSS
 }
 
 settings {
