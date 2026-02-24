@@ -1,4 +1,9 @@
-import { BadRequestException, Module } from '@nestjs/common';
+import {
+  BadRequestException,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ClassService } from './class.service';
 import { ClassController } from './class.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'node:path';
 import { BullModule } from '@nestjs/bullmq';
+import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
 
 @Module({
   imports: [
@@ -49,4 +55,8 @@ import { BullModule } from '@nestjs/bullmq';
   providers: [ClassService, ClassProcessor],
   exports: [MongooseModule],
 })
-export class ClassModule {}
+export class ClassModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TenantsMiddleware).forRoutes(ClassController);
+  }
+}

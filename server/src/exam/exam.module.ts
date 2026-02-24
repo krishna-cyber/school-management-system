@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ExamController } from './exam.controller';
 import { MarksService } from './marks.service';
@@ -8,6 +8,7 @@ import { Marksheet, MarksheetSchema } from './schemas/marksheet.schema';
 import { BullModule } from '@nestjs/bullmq';
 import { MarksheetWorker } from './exam.worker';
 import { Class, ClassSchema } from 'src/class/schemas/class.schema';
+import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import { Class, ClassSchema } from 'src/class/schemas/class.schema';
   controllers: [ExamController],
   providers: [ExamService, MarksService, MarksheetWorker],
 })
-export class ExamModule {}
+export class ExamModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TenantsMiddleware).forRoutes(ExamController);
+  }
+}
