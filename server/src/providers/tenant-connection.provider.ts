@@ -12,6 +12,8 @@ export const TenantConnectionProvider = {
         'Apply TenantsMiddleware to the route to use tenant connection',
       );
     }
+
+    //most important {usecache:true} to avoid creating multiple connections and to rebuild the schemas for each request it receives
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     return connection.useDb(request?.tenantId, { useCache: true });
   },
