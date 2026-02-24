@@ -1,7 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
-import { InjectModel } from '@nestjs/mongoose';
 import { Class } from './schemas/class.schema';
 import mongoose, { Model, Types } from 'mongoose';
 import { InjectQueue } from '@nestjs/bullmq';
@@ -10,7 +9,7 @@ import { Queue } from 'bullmq';
 @Injectable()
 export class ClassService {
   constructor(
-    @InjectModel(Class.name) private readonly classModel: Model<Class>,
+    @Inject('CLASS_MODEL') private readonly classModel: Model<Class>,
     @InjectQueue('classImportQueue') private readonly importQueue: Queue,
   ) {}
   async create(createClassDto: CreateClassDto) {

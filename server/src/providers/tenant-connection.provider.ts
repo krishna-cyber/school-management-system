@@ -3,7 +3,7 @@ import { REQUEST } from '@nestjs/core';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 
-export const connectionFactory = {
+export const TenantConnectionProvider = {
   provide: 'TENANT_CONNECTION',
   useFactory: (request, connection: Connection) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -15,5 +15,5 @@ export const connectionFactory = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     return connection.useDb(request?.tenantId, { useCache: true });
   },
-  inject: [REQUEST, getConnectionToken],
+  inject: [REQUEST, getConnectionToken()],
 };

@@ -1,11 +1,12 @@
 import { Connection } from 'mongoose';
 import { Class, ClassSchema } from 'src/class/schemas/class.schema';
 import { Exam, ExamSchema } from 'src/exam/schemas/exam.schema';
+import { Marksheet, MarksheetSchema } from 'src/exam/schemas/marksheet.schema';
 import { Fee, FeeSchema } from 'src/fee/schemas/fee.schema';
 import { Student, StudentSchema } from 'src/student/schemas/student.schema';
 import { Teacher, TeacherSchema } from 'src/teacher/schemas/teacher.schema';
 
-export const tenantsModel = {
+export const ModelProvider = {
   studentModel: {
     provide: 'STUDENT_MODEL',
     useFactory: (tenantConnection: Connection) => {
@@ -38,6 +39,13 @@ export const tenantsModel = {
     provide: 'TEACHER_MODEL',
     useFactory: (tenantConnection: Connection) => {
       return tenantConnection.model(Teacher.name, TeacherSchema);
+    },
+    inject: ['TENANT_CONNECTION'],
+  },
+  marksheetModel: {
+    provide: 'MARKSHEET_MODEL',
+    useFactory: (tenantConnection: Connection) => {
+      return tenantConnection.model(Marksheet.name, MarksheetSchema);
     },
     inject: ['TENANT_CONNECTION'],
   },

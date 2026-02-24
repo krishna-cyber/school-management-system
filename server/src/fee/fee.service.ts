@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateFeeDto } from './dto/create-fee.dto';
 import { UpdateFeeDto } from './dto/update-fee.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -32,8 +32,8 @@ interface Invoice {
 @Injectable()
 export class FeeService {
   constructor(
-    @InjectModel(Fee.name) private readonly feeModel: Model<Fee>,
-    @InjectModel(Student.name) private readonly studentModel: Model<Student>,
+    @Inject('FEE_MODEL') private readonly feeModel: Model<Fee>,
+    @Inject('STUDENT_MODEL') private readonly studentModel: Model<Student>,
   ) {}
   async create(createFeeDto: CreateFeeDto) {
     const createdFee = new this.feeModel(createFeeDto);

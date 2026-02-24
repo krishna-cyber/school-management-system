@@ -14,16 +14,13 @@ import { diskStorage } from 'multer';
 import { extname } from 'node:path';
 import { BullModule } from '@nestjs/bullmq';
 import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
+import { ModelProvider } from 'src/providers/tenant-models.provider';
+import { TenantConnectionProvider } from 'src/providers/tenant-connection.provider';
 
 @Module({
   imports: [
     BullModule.registerQueue({ name: 'classImportQueue' }),
-    MongooseModule.forFeature([
-      {
-        name: Class.name,
-        schema: ClassSchema,
-      },
-    ]),
+
     MulterModule.register({
       limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
       fileFilter(req, file, callback) {
@@ -52,8 +49,13 @@ import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
     }),
   ],
   controllers: [ClassController],
-  providers: [ClassService, ClassProcessor],
-  exports: [MongooseModule],
+  providers: [
+    ClassService,
+    ClassProcessor,
+    TenantConnectionProvider,
+    ModelProvider.classModel,
+  ],
+  exports: [],
 })
 export class ClassModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

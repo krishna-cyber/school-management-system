@@ -1,5 +1,4 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Student } from 'src/student/schemas/student.schema';
 import { CreateMarkSheetDto } from './dto/create-marksheet.dto';
@@ -12,8 +11,8 @@ import type { Cache } from 'cache-manager';
 @Injectable()
 export class MarksService {
   constructor(
-    @InjectModel(Student.name) private readonly studentModel: Model<Student>,
-    @InjectModel(Marksheet.name)
+    @Inject('STUDENT_MODEL') private readonly studentModel: Model<Student>,
+    @Inject('MARKSHEET_MODEL')
     private readonly marksheetModel: Model<Marksheet>,
     @InjectQueue('marksheetGeneration')
     private readonly marksheetQueue: Queue,

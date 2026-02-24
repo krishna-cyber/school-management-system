@@ -1,14 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import { InjectModel } from '@nestjs/mongoose';
 import { Student } from './schemas/student.schema';
 import mongoose, { Model } from 'mongoose';
 
 @Injectable()
 export class StudentService {
   constructor(
-    @InjectModel(Student.name) private readonly studentModel: Model<Student>,
+    @Inject('STUDENT_MODEL') private readonly studentModel: Model<Student>,
   ) {}
   async create(createStudentDto: CreateStudentDto) {
     const createStudent = new this.studentModel(createStudentDto);
@@ -17,7 +16,7 @@ export class StudentService {
   }
 
   findAll() {
-    return `This action returns all student`;
+    return this.studentModel.find();
   }
 
   findOne(id: string) {

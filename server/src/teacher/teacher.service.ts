@@ -1,14 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
-import { InjectModel } from '@nestjs/mongoose';
 import { Teacher } from './schemas/teacher.schema';
 import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class TeacherService {
   constructor(
-    @InjectModel(Teacher.name) private readonly teacherModel: Model<Teacher>,
+    @Inject('TEACHER_MODEL') private readonly teacherModel: Model<Teacher>,
   ) {}
   async create(createTeacherDto: CreateTeacherDto) {
     const createTeacher = new this.teacherModel(createTeacherDto);
@@ -17,7 +16,7 @@ export class TeacherService {
   }
 
   findAll() {
-    return `This action returns all teacher`;
+    return this.teacherModel.find();
   }
 
   findOne(id: string) {

@@ -1,6 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Class } from 'src/class/schemas/class.schema';
 import * as Handlebars from 'handlebars';
@@ -24,7 +23,7 @@ export interface MarksheetJobData extends Omit<Marksheet, 'student' | 'class'> {
 @Processor('marksheetGeneration', { concurrency: 5 })
 export class MarksheetWorker extends WorkerHost {
   constructor(
-    @InjectModel(Class.name) private readonly classModel: Model<Class>,
+    @Inject('CLASS_MODEL') private readonly classModel: Model<Class>,
     @Inject('CACHE_MANAGER') private readonly cacheManager: Cache,
   ) {
     super();

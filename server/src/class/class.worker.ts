@@ -1,12 +1,11 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { ValidationError } from '@nestjs/common';
+import { Inject, ValidationError } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { ImportJobData } from 'src/student/student.worker';
 import { readFile, utils } from 'xlsx';
 import { Class } from './schemas/class.schema';
 import { CreateClassDto } from './dto/create-class.dto';
 import { validate } from 'class-validator';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { logger } from '@sentry/nestjs';
@@ -26,7 +25,7 @@ interface SubjectData {
 @Processor('classImportQueue', { concurrency: 5 })
 export class ClassProcessor extends WorkerHost {
   constructor(
-    @InjectModel(Class.name) private readonly classModel: Model<Class>,
+    @Inject('CLASS_MODEL') private readonly classModel: Model<Class>,
   ) {
     super();
   }

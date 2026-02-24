@@ -3,7 +3,7 @@ import { Job } from 'bullmq';
 import { Student } from './schemas/student.schema';
 import { validate, ValidationError } from 'class-validator';
 import { readFile, utils } from 'xlsx';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Inject } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { ImportParentDto, ImportStudentDto } from './dto/import-student.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,8 +21,8 @@ export interface ImportJobData {
 @Processor('teacherImportQueue', { concurrency: 5 })
 export class StudentProcessor extends WorkerHost {
   constructor(
-    @InjectModel(Student.name) private readonly studentModel: Model<Student>,
-    @InjectModel(Class.name) private readonly classModel: Model<Class>,
+    @Inject('STUDENT_MODEL') private readonly studentModel: Model<Student>,
+    @Inject('CLASS_MODEL') private readonly classModel: Model<Class>,
   ) {
     super();
   }

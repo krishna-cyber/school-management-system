@@ -7,6 +7,8 @@ export type StudentDocument = HydratedDocument<Tenant>;
   timestamps: true,
 })
 export class Tenant {
+  @Prop({ required: true, unique: true })
+  _id: string;
   @Prop({ required: true })
   name: string;
   @Prop({ required: true })

@@ -19,10 +19,7 @@ export class TenantService {
   }
 
   findOne(id: string) {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('Invalid tenant ID');
-    }
-    return this.tenantModel.findById(id);
+    return this.tenantModel.findOne({ _id: id });
   }
 
   update(id: number, updateTenantDto: UpdateTenantDto) {
