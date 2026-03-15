@@ -19,11 +19,21 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bullmq';
 import { CacheModule } from '@nestjs/cache-manager';
 import { createKeyv } from '@keyv/redis';
-import { TenantModule } from './tenant/tenant.module';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
+import { auth } from './utils/auth';
+import { AuthModule as AuthMo } from './auth/auth.module';
 
 @Module({
   imports: [
     SentryModule.forRoot(),
+    AuthModule.forRoot({
+      auth,
+      bodyParser: {
+        json: { limit: '2mb' },
+        urlencoded: { limit: '2mb', extended: true },
+        rawBody: true,
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
@@ -90,7 +100,7 @@ import { TenantModule } from './tenant/tenant.module';
     ExamModule,
     ClassModule,
     FeeModule,
-    TenantModule,
+    AuthMo,
   ],
   controllers: [AppController],
   providers: [

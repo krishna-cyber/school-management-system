@@ -4,7 +4,7 @@ import {
   NestMiddleware,
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { TenantService } from 'src/tenant/tenant.service';
+import { TenantService } from 'src/auth/tenant.service';
 
 @Injectable()
 export class TenantsMiddleware implements NestMiddleware {
