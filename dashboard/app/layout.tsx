@@ -4,6 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import ReactQueryProvider from "./query-provider"
+import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   )

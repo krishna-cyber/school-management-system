@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 type Props = {
   trigger: ReactNode
@@ -56,13 +57,22 @@ const ProfileDropdown = ({ trigger, defaultOpen, align = "end" }: Props) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
+          {/* Account information */}
           <DropdownMenuItem className="px-4 py-2.5 text-base">
             <UserIcon className="size-5 text-foreground" />
             <span>My account</span>
           </DropdownMenuItem>
+
+          {/* Change settings and security */}
+
           <DropdownMenuItem className="px-4 py-2.5 text-base">
-            <SettingsIcon className="size-5 text-foreground" />
-            <span>Settings</span>
+            <Link
+              href="/dashboard/account-settings"
+              className="flex w-full items-center gap-2"
+            >
+              <SettingsIcon className="size-5 text-foreground" />
+              <span>Settings & Security</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="px-4 py-2.5 text-base">
             <CreditCardIcon className="size-5 text-foreground" />

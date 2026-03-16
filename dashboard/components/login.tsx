@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Logo } from "@/components/logo"
 import { authClient } from "@/lib/auth-client"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -36,9 +37,13 @@ const Login = () => {
       email: data.email, // required
       password: data.password, // required
       rememberMe: true,
-      callbackURL: "http://localhost:3001/dashboard",
+      callbackURL: "/dashboard",
+      fetchOptions: {
+        onError(ctx) {
+          toast.error(ctx.error.message)
+        },
+      },
     })
-    console.log(response, error)
   }
 
   return (
@@ -160,7 +165,11 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit">
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={form.formState.isSubmitting}
+              >
                 Continue with Email
               </Button>
             </form>
