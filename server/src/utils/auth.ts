@@ -30,5 +30,9 @@ export const auth = betterAuth({
       },
     },
   },
+  advanced: {
+    disableOriginCheck: true, // For development only. Make sure to enable CSRF protection in production!
+  },
+  trustedOrigins: ['http://localhost:3001'], // ✅ Next.js port
   experimental: { joins: true },
 });

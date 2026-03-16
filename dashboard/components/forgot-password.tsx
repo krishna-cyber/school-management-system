@@ -10,6 +10,7 @@ import { ChevronLeftIcon } from "lucide-react"
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
+import Link from "next/link"
 
 //component from shadcn/studio , reset password
 
@@ -77,10 +78,13 @@ const ForgotPassword = () => {
             </Button>
           </form>
 
-          <a href="#" className="group mx-auto flex w-fit items-center gap-2">
+          <Link
+            href="/login"
+            className="group mx-auto flex w-fit items-center gap-2"
+          >
             <ChevronLeftIcon className="size-5 transition-transform duration-200 group-hover:-translate-x-0.5" />
             <span>Back to login</span>
-          </a>
+          </Link>
         </CardContent>
       </Card>
     </div>

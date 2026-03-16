@@ -1,5 +1,4 @@
 "use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
@@ -16,10 +15,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Logo } from "@/components/logo"
+import { authClient } from "@/lib/auth-client"
 
 const formSchema = z.object({
   email: z.email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+  password: z.string().nonempty("Password is required"),
 })
 
 const Login = () => {
@@ -31,8 +31,14 @@ const Login = () => {
     resolver: zodResolver(formSchema),
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const { data: response, error } = await authClient.signIn.email({
+      email: data.email, // required
+      password: data.password, // required
+      rememberMe: true,
+      callbackURL: "http://localhost:3001/dashboard",
+    })
+    console.log(response, error)
   }
 
   return (
@@ -113,7 +119,12 @@ const Login = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>
+                      Email{" "}
+                      <span className="relative right-2.5 bottom-1/3 text-xs font-light text-red-600">
+                        *
+                      </span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="w-full"
@@ -131,7 +142,12 @@ const Login = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>
+                      Password{" "}
+                      <span className="relative right-2 bottom-1/3 text-xs font-light text-red-600">
+                        *
+                      </span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="w-full"
@@ -153,13 +169,16 @@ const Login = () => {
           <div className="mt-5 space-y-5">
             <Link
               className="block text-center text-sm text-muted-foreground underline"
-              href="#"
+              href="/forgot-password"
             >
               Forgot your password?
             </Link>
             <p className="text-center text-sm">
               Don&apos;t have an account?
-              <Link className="ml-1 text-muted-foreground underline" href="#">
+              <Link
+                className="ml-1 text-muted-foreground underline"
+                href="/signup"
+              >
                 Create account
               </Link>
             </p>

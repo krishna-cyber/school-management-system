@@ -5,6 +5,7 @@ import { auth } from 'src/utils/auth';
 import { fromNodeHeaders } from 'better-auth/node';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import type { Request } from 'express';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class TenantService {
@@ -23,6 +24,20 @@ export class TenantService {
       asResponse: true,
     });
     return betterAuthResponse;
+  }
+
+  async login(loginDto: LoginDto) {
+    const data = await auth.api.signInEmail({
+      body: {
+        email: loginDto.email,
+        password: loginDto.password,
+        rememberMe: loginDto.rememberMe || false,
+        callbackURL: loginDto.callbackURL || '/dashboard',
+      },
+      asResponse: true,
+    });
+
+    return data;
   }
 
   findAll() {

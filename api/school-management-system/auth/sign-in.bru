@@ -1,11 +1,11 @@
 meta {
-  name: register
+  name: sign-in
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
-  url: {{base_url}}/api/auth/register
+  url: {{base_url}}/auth/sign-in/email
   body: json
   auth: inherit
 }
@@ -16,11 +16,9 @@ headers {
 
 body:json {
   {
-    "name":"Pionners Scholars Academy",
     "email":"tiwarikrishna5432d1d0f@gmail.com",
     "password":"123456",
-    "tenantId":"pioneer",
-    "address":"Ghodaghodi-04, Pahalmanpur"
+    "callbackUrl":"/dashboard"
   }
 }
 

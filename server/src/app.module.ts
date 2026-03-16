@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -22,6 +22,7 @@ import { createKeyv } from '@keyv/redis';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { auth } from './utils/auth';
 import { AuthModule as AuthMo } from './auth/auth.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -116,4 +117,8 @@ import { AuthModule as AuthMo } from './auth/auth.module';
   ],
   exports: [MongooseModule],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*'); // log all routes
+  }
+}

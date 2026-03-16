@@ -1,11 +1,11 @@
 meta {
-  name: register
+  name: ok
   type: http
-  seq: 1
+  seq: 3
 }
 
-post {
-  url: {{base_url}}/api/auth/register
+get {
+  url: {{base_url}}/api/auth/ok
   body: json
   auth: inherit
 }
@@ -22,6 +22,8 @@ body:json {
     "tenantId":"pioneer",
     "address":"Ghodaghodi-04, Pahalmanpur"
   }
+  
+  
 }
 
 settings {
