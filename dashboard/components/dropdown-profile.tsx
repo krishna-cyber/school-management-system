@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import { authClient } from "@/lib/auth-client"
+import SignOutDropdownItem from "./signout-dropdown-item"
 
 type Props = {
   trigger: ReactNode
@@ -99,13 +101,7 @@ const ProfileDropdown = ({ trigger, defaultOpen, align = "end" }: Props) => {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          variant="destructive"
-          className="px-4 py-2.5 text-base"
-        >
-          <LogOutIcon className="size-5" />
-          <span>Logout</span>
-        </DropdownMenuItem>
+        <SignOutDropdownItem />
       </DropdownMenuContent>
     </DropdownMenu>
   )
