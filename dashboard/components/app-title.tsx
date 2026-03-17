@@ -6,7 +6,6 @@ import {
 import Link from "next/link"
 
 export function AppTitle() {
-  // const { setOpenMobile } = useSidebar()
   return (
     <SidebarMenu>
       <SidebarMenuItem>

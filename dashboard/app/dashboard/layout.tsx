@@ -54,9 +54,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
       <SidebarProvider>
         <Sidebar>
-          <AppTitle />
           <SidebarContent>
             <SidebarGroup>
+              <AppTitle />
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
