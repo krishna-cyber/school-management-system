@@ -13,7 +13,7 @@ import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
 
 const requirements = [
-  { regex: /.{12,}/, text: "At least 12 characters" },
+  { regex: /.{6,}/, text: "At least 6 characters" },
   { regex: /[a-z]/, text: "At least 1 lowercase letter" },
   { regex: /[A-Z]/, text: "At least 1 uppercase letter" },
   { regex: /[0-9]/, text: "At least 1 number" },
@@ -75,9 +75,9 @@ const EmailPass = () => {
       {
         onSuccess(ctx) {
           //reset the form
-          e.currentTarget.reset()
-          setPassword("")
           toast.success("Password changed successfully")
+          e.target.reset()
+          setPassword("")
         },
         onError(ctx) {
           toast.error(ctx.error.message)
