@@ -46,12 +46,15 @@ import {
   Undo2Icon,
   UsersIcon,
 } from "lucide-react"
+import { AppTitle } from "@/components/app-title"
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="flex min-h-dvh w-full">
       <NextTopLoader color="#5EA500" />
+
       <SidebarProvider>
         <Sidebar>
+          <AppTitle />
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupContent>
