@@ -1,5 +1,5 @@
 import React from "react"
-
+import NextTopLoader from "nextjs-toploader"
 import ProfileDropdown from "@/components/dropdown-profile"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -49,6 +49,7 @@ import {
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="flex min-h-dvh w-full">
+      <NextTopLoader color="#5EA500" />
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
@@ -62,15 +63,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                         <span>Dashboard</span>
                       </a>
                     </SidebarMenuButton>
-                    <SidebarMenuBadge className="rounded-full bg-primary/10">
+                    {/* <SidebarMenuBadge className="rounded-full bg-primary/10">
                       5
-                    </SidebarMenuBadge>
+                    </SidebarMenuBadge> */}
                   </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>Pages</SidebarGroupLabel>
+              <SidebarGroupLabel>Academics</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
@@ -144,7 +145,54 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>Supporting Features</SidebarGroupLabel>
+              <SidebarGroupLabel>Finance</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <SquareActivityIcon />
+                        <span>Real Time Monitoring</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <CalendarClockIcon />
+                        <span>Schedule Post & Calendar</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <Undo2Icon />
+                        <span>Report & Export</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <SettingsIcon />
+                        <span>Settings & Integrations</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <UsersIcon />
+                        <span>User Management</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>Examination</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
