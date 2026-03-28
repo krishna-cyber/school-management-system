@@ -28,84 +28,88 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import {
-  ArrowRightLeftIcon,
-  CalendarClockIcon,
-  ChartNoAxesCombinedIcon,
-  ChartPieIcon,
-  ChartSplineIcon,
-  ClipboardListIcon,
-  Clock9Icon,
-  CrownIcon,
+  Award,
+  Banknote,
+  ChartColumnIncreasing,
+  ChartLine,
+  ClipboardList,
+  Clock,
+  ClockFading,
   Facebook,
-  HashIcon,
+  FileChartColumn,
+  GraduationCap,
+  HandFist,
+  IdCard,
+  IdCardLanyard,
   Instagram,
+  LayoutDashboard,
   Linkedin,
-  SettingsIcon,
-  SquareActivityIcon,
+  ListCheck,
+  NotebookPen,
+  Rows4,
+  ScrollText,
+  ShieldUser,
   Twitter,
-  Undo2Icon,
+  Umbrella,
+  UserCheck,
+  UserRoundPlus,
+  Users,
   UsersIcon,
+  UsersRound,
+  WalletMinimal,
 } from "lucide-react"
 import { AppTitle } from "@/components/app-title"
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="flex min-h-dvh w-full">
       <NextTopLoader color="#5EA500" />
-
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
             <SidebarGroup>
               <AppTitle />
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>ACADEMICS</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <ChartNoAxesCombinedIcon />
+                        <LayoutDashboard />
                         <span>Dashboard</span>
                       </a>
                     </SidebarMenuButton>
-                    {/* <SidebarMenuBadge className="rounded-full bg-primary/10">
-                      5
-                    </SidebarMenuBadge> */}
                   </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Academics</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <ChartSplineIcon />
-                        <span>Content Performance</span>
+                        <Users />
+                        <span>Classes/Sections</span>
+                      </a>
+                    </SidebarMenuButton>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <a href="#">
+                          <Rows4 />
+                          <span>Subjects</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <Clock />
+                        <span>Timetable/Schedule</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <UsersIcon />
-                        <span>Audience Insight</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <a href="#">
-                        <ChartPieIcon />
-                        <span>Engagement Metrics</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <a href="#">
-                        <HashIcon />
-                        <span>Hashtag Performance</span>
+                        <ClipboardList />
+                        <span>Assignments</span>
                       </a>
                     </SidebarMenuButton>
                     <SidebarMenuBadge className="rounded-full bg-primary/10">
@@ -115,32 +119,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <ArrowRightLeftIcon />
-                        <span>Competitor Analysis</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <a href="#">
-                        <Clock9Icon />
-                        <span>Campaign Tracking</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <a href="#">
-                        <ClipboardListIcon />
-                        <span>Sentiment Tracking</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <a href="#">
-                        <CrownIcon />
-                        <span>Influencer</span>
+                        <NotebookPen />
+                        <span>Exams/Gradebook</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -148,46 +128,54 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>Finance</SidebarGroupLabel>
+              <SidebarGroupLabel>STUDENTS</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <SquareActivityIcon />
-                        <span>Real Time Monitoring</span>
+                        <UsersRound />
+                        <span>All Students</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <CalendarClockIcon />
-                        <span>Schedule Post & Calendar</span>
+                        <UserRoundPlus />
+                        <span>Admissions</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <Undo2Icon />
-                        <span>Report & Export</span>
+                        <UserCheck />
+                        <span>Attendance</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <SettingsIcon />
-                        <span>Settings & Integrations</span>
+                        <GraduationCap />
+                        <span>Promotion/Graduation</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <UsersIcon />
-                        <span>User Management</span>
+                        <FileChartColumn />
+                        <span>Students records</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <IdCard />
+                        <span>ID cards</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -195,38 +183,86 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>Examination</SidebarGroupLabel>
+              <SidebarGroupLabel>STAFFS</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <SquareActivityIcon />
-                        <span>Real Time Monitoring</span>
+                        <ShieldUser />
+                        <span>Teachers</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <CalendarClockIcon />
-                        <span>Schedule Post & Calendar</span>
+                        <HandFist />
+                        <span>Non-Teaching staff</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <Undo2Icon />
-                        <span>Report & Export</span>
+                        <ScrollText />
+                        <span>Attendance</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <a href="#">
-                        <SettingsIcon />
-                        <span>Settings & Integrations</span>
+                        <Umbrella />
+                        <span>Leave Management</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <Banknote />
+
+                        <span>Payroll</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>FINANCE</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <ListCheck />
+                        <span>Fee Structure</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <WalletMinimal />
+                        <span>Fee Collection</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <ClockFading />
+                        <span>Payment Records</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <Award />
+                        <span>Scholarships</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -234,7 +270,47 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     <SidebarMenuButton asChild>
                       <a href="#">
                         <UsersIcon />
-                        <span>User Management</span>
+
+                        <span>Reports</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>REPORTS & ANALYTICS</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <ChartLine />
+                        <span>Student Report</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <IdCardLanyard />
+                        <span>Staff Reports</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <ChartColumnIncreasing />
+                        <span>Finance Reports</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#">
+                        <ScrollText />
+                        <span>Exam Results</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -298,9 +374,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <p className="text-center text-sm text-balance">
               {`©${new Date().getFullYear()}`}{" "}
               <a href="#" className="text-primary">
-                shadcn/studio
+                parrotlab/gurukul
               </a>
-              , Made for better web design
+              , Made for better school management. All rights reserved.
             </p>
             <div className="flex items-center gap-5">
               <a href="#">
