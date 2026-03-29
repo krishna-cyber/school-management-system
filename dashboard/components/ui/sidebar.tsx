@@ -23,6 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { SidebarIcon } from "@phosphor-icons/react"
+import { usePathname } from "next/navigation"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -494,12 +495,19 @@ function SidebarMenuButton({
   size = "default",
   tooltip,
   className,
+  href,
   ...props
 }: React.ComponentProps<"button"> & {
   asChild?: boolean
+  href?: string
   isActive?: boolean
   tooltip?: string | React.ComponentProps<typeof TooltipContent>
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
+  const pathname = usePathname()
+  if (href && pathname === href) {
+    isActive = true
+  }
+
   const Comp = asChild ? Slot.Root : "button"
   const { isMobile, state } = useSidebar()
 
@@ -509,7 +517,11 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      className={cn(
+        sidebarMenuButtonVariants({ variant, size }),
+        isActive && "bg-green-400/70! text-green-900!",
+        className
+      )}
       {...props}
     />
   )
