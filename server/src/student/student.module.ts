@@ -59,6 +59,7 @@ import { ModelProvider } from 'src/providers/tenant-models.provider';
   ],
   exports: [],
 })
+// export class StudentModule {}
 export class StudentModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(TenantsMiddleware).forRoutes(StudentController);
