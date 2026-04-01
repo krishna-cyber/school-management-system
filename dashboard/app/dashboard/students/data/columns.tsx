@@ -23,6 +23,7 @@ import {
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu"
 import { type Student } from "./schema"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // import { DataTableRowActions } from "./data-table-row-actions"
 type DataTableColumnHeaderProps<TData, TValue> =
   React.HTMLAttributes<HTMLDivElement> & {
@@ -153,7 +154,20 @@ export const studentColumns: ColumnDef<Student>[] = [
       <DataTableColumnHeader column={column} title="StudentName" />
     ),
     cell: ({ row }) => (
-      <LongText className="max-w-36 ps-3">{row.getValue("full_name")}</LongText>
+      <div className="flex items-center gap-2">
+        {" "}
+        <Avatar>
+          <AvatarImage
+            src={row.original.photo}
+            alt={row.getValue("full_name")}
+            className="grayscale"
+          />
+          <AvatarFallback>{"SN"}</AvatarFallback>
+        </Avatar>
+        <LongText className="max-w-36 ps-3">
+          {row.getValue("full_name")}
+        </LongText>
+      </div>
     ),
     meta: {
       className: cn(
@@ -164,15 +178,40 @@ export const studentColumns: ColumnDef<Student>[] = [
     enableHiding: false,
   },
   {
-    id: "photo",
+    accessorKey: "class",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Photo" />
+      <DataTableColumnHeader column={column} title="Class" />
     ),
-    cell: ({ row }) => {
-      const { full_name } = row.original
-      return <LongText className="max-w-36">{full_name}</LongText>
-    },
-    meta: { className: "w-36" },
+    cell: ({ row }) => <div>{row.getValue("class")}</div>,
+    enableSorting: false,
+  },
+
+  {
+    accessorKey: "date_of_birth",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date of Birth" />
+    ),
+    cell: ({ row }) => (
+      <div>{new Date(row.getValue("date_of_birth")).toLocaleDateString()}</div>
+    ),
+    enableSorting: false,
+  },
+  {
+    accessorKey: "age",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Age" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        {(() => {
+          const dob = new Date(row.getValue("date_of_birth"))
+          const diffMs = Date.now() - dob.getTime()
+          const ageDate = new Date(diffMs)
+          return Math.abs(ageDate.getUTCFullYear() - 1970)
+        })()}
+      </div>
+    ),
+    enableSorting: false,
   },
   {
     accessorKey: "gender",
@@ -183,14 +222,15 @@ export const studentColumns: ColumnDef<Student>[] = [
       <div className="w-fit ps-2 text-nowrap">{row.getValue("gender")}</div>
     ),
   },
-  // {
-  //   accessorKey: "phoneNumber",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Phone Number" />
-  //   ),
-  //   cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
-  //   enableSorting: false,
-  // },
+  {
+    accessorKey: "address",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Address" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">{row.getValue("address")}</div>
+    ),
+  },
   // {
   //   accessorKey: "status",
   //   header: ({ column }) => (
