@@ -16,7 +16,6 @@ export class TenantsMiddleware implements NestMiddleware {
       throw new BadRequestException('x-tenant-id header is required');
     }
     const tenant = await this.authService.findOne(tenantId as string);
-    console.log('tenant', tenant);
     if (!tenant) {
       throw new BadRequestException('Tenant not exists');
     }

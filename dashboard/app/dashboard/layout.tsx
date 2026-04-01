@@ -346,11 +346,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </header>
-          <main className="size-full flex-1 px-4 py-6 sm:px-6">
-            <Card>
-              <CardContent>{children}</CardContent>
-            </Card>
-          </main>
+          <main className="size-full flex-1 px-4 py-6 sm:px-6">{children}</main>
           <footer className="flex items-center justify-between gap-3 px-4 py-3 text-muted-foreground max-sm:flex-col sm:gap-6 sm:px-6 md:max-lg:flex-col">
             <p className="text-center text-sm text-balance">
               {`©${new Date().getFullYear()}`}{" "}

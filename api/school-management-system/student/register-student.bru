@@ -10,6 +10,10 @@ post {
   auth: inherit
 }
 
+headers {
+  x-tenant-id: pioneer
+}
+
 body:json {
   {
     "full_name": "Ram Bahadur",
@@ -18,10 +22,11 @@ body:json {
     "photo": "https://example.com/student-photo.jpg",
     "address": "Kathmandu, Nepal",
     "class": "6992f9f2ff4a7b633cfe6205",
+    "extra_fees":[],
     "parent": {
       "full_name": "Hari Bahadur",
       "photo": "https://example.com/parent-photo.jpg",
-      "occupation": "Teacher",
+      "occupation": "teacher",
       "qualification": "bachelor",
       "contact": {
         "phone_number": ["+9779868880218"],

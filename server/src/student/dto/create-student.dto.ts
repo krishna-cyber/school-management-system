@@ -47,11 +47,11 @@ class ParentDto {
   @ApiProperty({
     description: 'The occupation of the parent',
     enumName: 'Occupation',
-    enum: ['Teacher', 'Engineer', 'Doctor', 'Business', 'Agriculture', 'Other'],
+    enum: ['teacher', 'engineer', 'doctor', 'business', 'agriculture', 'other'],
     example: 'Teacher',
   })
   @IsString()
-  @IsEnum(['Teacher', 'Engineer', 'Doctor', 'Business', 'Agriculture', 'Other'])
+  @IsEnum(['teacher', 'engineer', 'doctor', 'business', 'agriculture', 'other'])
   occupation: string;
 
   @ApiProperty({
