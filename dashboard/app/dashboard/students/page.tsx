@@ -1,7 +1,7 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { UserPlus } from "lucide-react"
-import { StudentsTable } from "@/components/students-table"
+import { StudentsTable } from "@/app/dashboard/students/data-table"
 import { cn } from "@/lib/utils"
 import { students } from "./data/students"
 

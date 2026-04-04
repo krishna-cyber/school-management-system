@@ -4,7 +4,7 @@ import { UserPlus } from "lucide-react"
 // import { StudentsTable } from "@/components/students-table"
 import { cn } from "@/lib/utils"
 import { teachers } from "./data/teachers"
-import { TeachersTable } from "@/components/teachers-table"
+import { TeachersTable } from "@/app/dashboard/teachers/data-table"
 // import { students } from "./data/teachers"
 
 const Page = () => {

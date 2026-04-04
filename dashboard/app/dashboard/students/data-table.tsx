@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "@/components/data-table"
 // import { roles } from "../data/data"
-import { type Student } from "../app/dashboard/students/data/schema"
+import { type Student } from "./data/schema"
 // import { DataTableBulkActions } from "./data-table-bulk-actions"
-import { studentColumns as columns } from "../app/dashboard/students/data/columns"
+import { studentColumns as columns } from "./data/columns"
 
 type DataTableProps = {
   readonly data: Student[]
