@@ -178,15 +178,6 @@ export const teacherColumns: ColumnDef<Teacher>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "class",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Class" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("class")}</div>,
-    enableSorting: false,
-  },
-
-  {
     accessorKey: "date_of_birth",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date of Birth" />
