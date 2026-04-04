@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu"
-import { type Student } from "./schema"
+import { type Teacher } from "./schema"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // import { DataTableRowActions } from "./data-table-row-actions"
 type DataTableColumnHeaderProps<TData, TValue> =
@@ -31,7 +31,7 @@ type DataTableColumnHeaderProps<TData, TValue> =
     title: string
   }
 type DataTableRowActionsProps = {
-  row: Row<Student>
+  row: Row<Teacher>
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -120,7 +120,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   )
 }
 
-export const studentColumns: ColumnDef<Student>[] = [
+export const teacherColumns: ColumnDef<Teacher>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -131,7 +131,7 @@ export const studentColumns: ColumnDef<Student>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="translate-y-[2px]"
+        className="translate-y-0.5"
       />
     ),
     meta: {
@@ -219,7 +219,88 @@ export const studentColumns: ColumnDef<Student>[] = [
       <DataTableColumnHeader column={column} title="Gender" />
     ),
     cell: ({ row }) => (
-      <div className="w-fit ps-2 text-nowrap">{row.getValue("gender")}</div>
+      <div className="w-fit ps-2 text-nowrap">
+        <Badge
+          className={`${row.getValue("gender") == "male" ? "bg-blue-100 text-blue-800" : row.getValue("gender") == "female" ? "bg-pink-100 text-pink-800" : "bg-gray-100 text-gray-800"} capitalize`}
+        >
+          {row.getValue("gender")}
+        </Badge>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "phone_number",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Phone Number" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">
+        {row.original.contact.phone_number.map((num, index) => (
+          <div key={num}>
+            {num}
+            {index === row.original.contact.phone_number.length - 1 ? "" : ", "}
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">
+        {row.original.contact.email.map((email, index) => (
+          <div key={email}>
+            {email}
+            {index === row.original.contact.email.length - 1 ? "" : ", "}
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "date_of_joining",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date of Joining" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">
+        {new Date(row.getValue("date_of_joining")).toLocaleDateString()}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "qualifications",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Qualifications" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">
+        {row.getValue<string[]>("qualifications").join(", ")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "experience_years",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Experience (Years)" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">
+        {row.getValue("experience_years")}{" "}
+        {row.getValue("experience_years") === 1 ? "year" : "years"}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "salary",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Salary" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-fit ps-2 text-nowrap">{row.getValue("salary")}</div>
     ),
   },
   {
@@ -285,7 +366,7 @@ export const studentColumns: ColumnDef<Student>[] = [
     id: "actions",
     header: () => null,
     cell: () => {
-      return <DataTableRowActions row={null as unknown as Row<Student>} />
+      return <DataTableRowActions row={null as unknown as Row<Teacher>} />
     },
   },
 ]

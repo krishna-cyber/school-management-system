@@ -1,9 +1,11 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { UserPlus } from "lucide-react"
-import { StudentsTable } from "@/components/students-table"
+// import { StudentsTable } from "@/components/students-table"
 import { cn } from "@/lib/utils"
-import { students } from "./data/students"
+import { teachers } from "./data/teachers"
+import { TeachersTable } from "@/components/teachers-table"
+// import { students } from "./data/teachers"
 
 const Page = () => {
   const layout = "fixed" // or "fluid"
@@ -25,18 +27,19 @@ const Page = () => {
         {/* UsersPrimaryButtons  */}
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Student List</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Teacher List</h2>
             <p className="text-muted-foreground">
-              Manage your students and their details here.
+              Manage your teachers and their details here.
             </p>
           </div>
 
           {/* <Button className="space-x-1" onClick={() => setOpen("add")}> */}
           <Button className="space-x-1">
-            <span>Register Student</span> <UserPlus size={18} />
+            <span>Add Teacher</span> <UserPlus size={18} />
           </Button>
         </div>
-        <StudentsTable data={students} />
+        <TeachersTable data={teachers} />
+        {/* <StudentsTable data={students} /> */}
       </main>
       {/* <UsersDialogs /> */}
     </>

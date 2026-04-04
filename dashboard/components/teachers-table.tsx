@@ -13,6 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { cn } from "@/lib/utils"
+import { teacherColumns as columns } from "@/app/dashboard/teachers/data/columns"
 // import { type NavigateFn } from "@/hooks/use-table-url-state"
 import {
   Table,
@@ -24,17 +25,16 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "@/components/data-table"
 // import { roles } from "../data/data"
-import { type Student } from "../app/dashboard/students/data/schema"
 // import { DataTableBulkActions } from "./data-table-bulk-actions"
-import { studentColumns as columns } from "../app/dashboard/students/data/columns"
+import { Teacher } from "@/app/dashboard/teachers/data/schema"
 
 type DataTableProps = {
-  readonly data: Student[]
+  readonly data: Teacher[]
   // search: Record<string, unknown>
   // navigate: NavigateFn
 }
 
-export function StudentsTable({ data }: DataTableProps) {
+export function TeachersTable({ data }: DataTableProps) {
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
