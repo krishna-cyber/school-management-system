@@ -80,7 +80,11 @@ const formSchema = z.object({
   section: z.string(),
 })
 
-export function DataFilter() {
+export function DataFilter({
+  handleSubmit: handleSubmitProp,
+}: {
+  handleSubmit: (data: z.infer<typeof formSchema>) => void
+}) {
   const { register, control, handleSubmit, watch, reset } = useForm<
     z.infer<typeof formSchema>
   >({
@@ -94,7 +98,7 @@ export function DataFilter() {
   const selectedClass = watch("class")
   const selectedSection = watch("section")
   return (
-    <form id="filter-form" onSubmit={handleSubmit((d) => console.log(d))}>
+    <form id="filter-form" onSubmit={handleSubmit(handleSubmitProp)}>
       <div className="flex items-center justify-between pb-4">
         <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
           <FieldGroup className="flex flex-row gap-x-2">
@@ -185,6 +189,11 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  //TODO:usequery and fetch based on data changes on filter section
+
+  const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data)
+  }
   const table = useReactTable({
     data,
     columns,
@@ -198,7 +207,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="overflow-hidden rounded-md border">
-      <DataFilter />
+      <DataFilter handleSubmit={handleSubmit} />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
