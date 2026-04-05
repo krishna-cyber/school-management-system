@@ -8,6 +8,7 @@ import {
   getSortedRowModel,
   SortingState,
 } from "@tanstack/react-table"
+import { Controller, useForm } from "react-hook-form"
 
 import {
   Table,
@@ -18,10 +19,182 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import React from "react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { X } from "lucide-react"
+import { z } from "zod/v3"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FieldGroup } from "@/components/ui/field"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+}
+const classes = [
+  {
+    label: "Class 1",
+    value: "class1",
+    sections: [
+      { label: "Section 1A", value: "section1A" },
+      { label: "Section 1B", value: "section1B" },
+      { label: "Section 1C", value: "section1C" },
+    ],
+  },
+  {
+    label: "Class 2",
+    value: "class2",
+    sections: [
+      { label: "Section 2A", value: "section2A" },
+      { label: "Section 2B", value: "section2B" },
+      { label: "Section 2C", value: "section2C" },
+    ],
+  },
+  {
+    label: "Class 3",
+    value: "class3",
+    sections: [
+      { label: "Section 3A", value: "section3A" },
+      { label: "Section 3B", value: "section3B" },
+      { label: "Section 3C", value: "section3C" },
+    ],
+  },
+  {
+    label: "Class 4",
+    value: "class4",
+    sections: [
+      { label: "Section 4A", value: "section4A" },
+      { label: "Section 4B", value: "section4B" },
+      { label: "Section 4C", value: "section4C" },
+    ],
+  },
+]
+
+const formSchema = z.object({
+  class: z.string(),
+  section: z.string(),
+})
+
+export function DataFilter() {
+  const { register, control, handleSubmit } = useForm<
+    z.infer<typeof formSchema>
+  >({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      class: "",
+      section: "",
+    },
+    mode: "onChange",
+  })
+  const [isFiltered, setIsFiltered] = React.useState(false)
+  const [selectedClass, setSelectedClass] = React.useState("")
+  const [selectedSection, setSelectedSection] = React.useState("")
+  return (
+    <form id="filter-form" onSubmit={handleSubmit((d) => console.log(d))}>
+      <div className="flex items-center justify-between pb-4">
+        <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
+          <FieldGroup className="flex flex-row gap-x-2">
+            <Controller
+              name="class"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  defaultValue=""
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                    setSelectedClass(value)
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Class" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {classes.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {selectedClass && (
+              <Controller
+                name="section"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    defaultValue=""
+                    onValueChange={(value) => {
+                      field.onChange(value)
+                      setSelectedSection(value)
+                    }}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Section" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {classes
+                        .find((cls) => cls.value === selectedClass)
+                        ?.sections.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            )}
+          </FieldGroup>
+
+          {selectedClass && selectedSection && (
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setSelectedClass("")
+                setSelectedSection("")
+                setIsFiltered(false)
+              }}
+              className="h-8 px-2 lg:px-3"
+            >
+              Reset
+              <X className="ms-2 h-4 w-4" />
+            </Button>
+          )}
+
+          <Button
+            type="submit"
+            form="filter-form"
+            disabled={!selectedClass || !selectedSection}
+          >
+            Submit
+          </Button>
+        </div>
+        {/* {isFiltered && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              table.resetColumnFilters()
+              table.setGlobalFilter("")
+            }}
+            className="h-8 px-2 lg:px-3"
+          >
+            Reset
+            <Cross2Icon className="ms-2 h-4 w-4" />
+          </Button>
+        )} */}
+      </div>
+      {/* <DataTableViewOptions table={table} /> */}
+    </form>
+  )
 }
 
 export function DataTable<TData, TValue>({
@@ -42,6 +215,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="overflow-hidden rounded-md border">
+      <DataFilter />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

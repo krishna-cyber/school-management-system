@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import {
@@ -22,6 +23,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { ListAllEntities } from './dto/query-param.dto';
 
 @Controller('student')
 export class StudentController {
@@ -49,8 +51,8 @@ export class StudentController {
   }
 
   @Get()
-  findAll() {
-    return this.studentService.findAll();
+  findAll(@Query() query: ListAllEntities) {
+    return this.studentService.findAll(query);
   }
 
   @ApiOperation({ summary: 'Get a student by ID' })

@@ -36,6 +36,8 @@ const Page = () => {
           </p>
         </div>
 
+        {/* filter section classes and section */}
+
         <div className="container mx-auto py-10">
           <DataTable columns={columns} data={data} />
         </div>

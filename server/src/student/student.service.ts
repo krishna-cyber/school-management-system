@@ -3,6 +3,7 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './schemas/student.schema';
 import mongoose, { Model } from 'mongoose';
+import { ListAllEntities } from './dto/query-param.dto';
 
 @Injectable()
 export class StudentService {
@@ -15,8 +16,20 @@ export class StudentService {
     return { success: true, message: 'Student created successfully' };
   }
 
-  findAll() {
-    return this.studentModel.find();
+  findAll(query: ListAllEntities) {
+    console.log('Query parameters:', query);
+    let queryConditions = {};
+
+    if (query.class) {
+      queryConditions = { ...queryConditions, class: query.class };
+    }
+
+    if (query.section) {
+      queryConditions = { ...queryConditions, section: query.section };
+    }
+    console.log('Query conditions:', queryConditions);
+
+    return this.studentModel.find(queryConditions).populate('class');
   }
 
   findOne(id: string) {

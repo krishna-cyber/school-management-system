@@ -1,0 +1,24 @@
+meta {
+  name: get-students-class-section
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/student?class=10
+  body: json
+  auth: inherit
+}
+
+params:query {
+  class: 10
+}
+
+headers {
+  x-tenant-id: pioneer
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
