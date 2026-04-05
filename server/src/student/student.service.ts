@@ -27,8 +27,7 @@ export class StudentService {
     if (query.section) {
       queryConditions = { ...queryConditions, section: query.section };
     }
-    console.log('Query conditions:', queryConditions);
-
+    //Todo: if class is given there is compulsory section also, so first check for class and then section, , combine classid and sectionid and then fetch students
     return this.studentModel.find(queryConditions).populate('class');
   }
 

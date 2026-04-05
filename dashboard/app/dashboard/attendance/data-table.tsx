@@ -81,7 +81,7 @@ const formSchema = z.object({
 })
 
 export function DataFilter() {
-  const { register, control, handleSubmit } = useForm<
+  const { register, control, handleSubmit, watch, reset } = useForm<
     z.infer<typeof formSchema>
   >({
     resolver: zodResolver(formSchema),
@@ -91,9 +91,8 @@ export function DataFilter() {
     },
     mode: "onChange",
   })
-  const [isFiltered, setIsFiltered] = React.useState(false)
-  const [selectedClass, setSelectedClass] = React.useState("")
-  const [selectedSection, setSelectedSection] = React.useState("")
+  const selectedClass = watch("class")
+  const selectedSection = watch("section")
   return (
     <form id="filter-form" onSubmit={handleSubmit((d) => console.log(d))}>
       <div className="flex items-center justify-between pb-4">
@@ -108,11 +107,11 @@ export function DataFilter() {
                   defaultValue=""
                   onValueChange={(value) => {
                     field.onChange(value)
-                    setSelectedClass(value)
+                    reset({ class: value, section: "" })
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Class" />
+                    <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
                   <SelectContent>
                     {classes.map((option) => (
@@ -134,7 +133,6 @@ export function DataFilter() {
                     defaultValue=""
                     onValueChange={(value) => {
                       field.onChange(value)
-                      setSelectedSection(value)
                     }}
                   >
                     <SelectTrigger className="w-[180px]">
@@ -159,9 +157,7 @@ export function DataFilter() {
             <Button
               variant="ghost"
               onClick={() => {
-                setSelectedClass("")
-                setSelectedSection("")
-                setIsFiltered(false)
+                reset({ class: "", section: "" })
               }}
               className="h-8 px-2 lg:px-3"
             >
@@ -178,19 +174,6 @@ export function DataFilter() {
             Submit
           </Button>
         </div>
-        {/* {isFiltered && (
-          <Button
-            variant="ghost"
-            onClick={() => {
-              table.resetColumnFilters()
-              table.setGlobalFilter("")
-            }}
-            className="h-8 px-2 lg:px-3"
-          >
-            Reset
-            <Cross2Icon className="ms-2 h-4 w-4" />
-          </Button>
-        )} */}
       </div>
       {/* <DataTableViewOptions table={table} /> */}
     </form>
