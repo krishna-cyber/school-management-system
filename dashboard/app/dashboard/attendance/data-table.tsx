@@ -8,6 +8,7 @@ import {
   getSortedRowModel,
   SortingState,
 } from "@tanstack/react-table"
+import { format } from "date-fns"
 import { Controller, useForm } from "react-hook-form"
 
 import {
@@ -18,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Calendar } from "@/components/ui/calendar"
 import React from "react"
 import {
   Select,
@@ -27,10 +29,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
+import { CalendarIcon, X } from "lucide-react"
 import { z } from "zod/v3"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldGroup } from "@/components/ui/field"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -77,7 +84,7 @@ const classes = [
 
 const formSchema = z.object({
   class: z.string(),
-  section: z.string(),
+  date: z.date(),
 })
 
 export function DataFilter({
@@ -91,12 +98,12 @@ export function DataFilter({
     resolver: zodResolver(formSchema),
     defaultValues: {
       class: "",
-      section: "",
+      date: new Date(),
     },
     mode: "onChange",
   })
   const selectedClass = watch("class")
-  const selectedSection = watch("section")
+  const selectedDate = watch("date")
   return (
     <form id="filter-form" onSubmit={handleSubmit(handleSubmitProp)}>
       <div className="flex items-center justify-between pb-4">
@@ -111,10 +118,10 @@ export function DataFilter({
                   defaultValue=""
                   onValueChange={(value) => {
                     field.onChange(value)
-                    reset({ class: value, section: "" })
+                    reset({ class: value, date: new Date() })
                   }}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-45">
                     <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
                   <SelectContent>
@@ -127,41 +134,47 @@ export function DataFilter({
                 </Select>
               )}
             />
+
             {selectedClass && (
               <Controller
-                name="section"
+                name="date"
                 control={control}
                 render={({ field }) => (
-                  <Select
-                    {...field}
-                    defaultValue=""
-                    onValueChange={(value) => {
-                      field.onChange(value)
-                    }}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Section" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {classes
-                        .find((cls) => cls.value === selectedClass)
-                        ?.sections.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        data-empty={!selectedDate}
+                        className="w-[280px] justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
+                      >
+                        <CalendarIcon />
+                        {selectedDate ? (
+                          format(selectedDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        {...register("date")}
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date > new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 )}
               />
             )}
           </FieldGroup>
 
-          {selectedClass && selectedSection && (
+          {selectedClass && selectedDate && (
             <Button
               variant="ghost"
               onClick={() => {
-                reset({ class: "", section: "" })
+                reset({ class: "", date: new Date() })
               }}
               className="h-8 px-2 lg:px-3"
             >
@@ -173,7 +186,7 @@ export function DataFilter({
           <Button
             type="submit"
             form="filter-form"
-            disabled={!selectedClass || !selectedSection}
+            disabled={!selectedClass || !selectedDate}
           >
             Submit
           </Button>
