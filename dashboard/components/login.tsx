@@ -39,6 +39,9 @@ const Login = () => {
       rememberMe: true,
       callbackURL: "/dashboard",
       fetchOptions: {
+        onSuccess(context) {
+          localStorage.setItem("tenantId", context.data?.user?.tenantId)
+        },
         onError(ctx) {
           toast.error(ctx.error.message)
         },

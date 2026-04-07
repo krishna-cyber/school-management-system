@@ -58,6 +58,7 @@ import {
 } from "lucide-react"
 import { AppTitle } from "@/components/app-title"
 import Link from "next/link"
+import { TenantSync } from "./tenant-sync"
 
 export interface SidebarItems {
   key: string
@@ -264,6 +265,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   ]
   return (
     <section className="flex min-h-dvh w-full">
+      <TenantSync />
       <NextTopLoader color="#5EA500" />
       <SidebarProvider>
         <Sidebar>

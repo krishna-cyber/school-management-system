@@ -9,7 +9,13 @@ const SignOutDropdownItem = () => {
   return (
     <DropdownMenuItem
       onClick={async () => {
-        await authClient.signOut()
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess() {
+              localStorage.removeItem("tenantId")
+            },
+          },
+        })
         redirect("/")
       }}
       variant="destructive"
