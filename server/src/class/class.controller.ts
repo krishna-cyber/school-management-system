@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
@@ -45,8 +46,8 @@ export class ClassController {
   }
 
   @Get()
-  findAll() {
-    return this.classService.findAll();
+  findAll(@Query('count_student') countStudent: boolean) {
+    return this.classService.findAll(countStudent);
   }
 
   @ApiOperation({ summary: 'Get a class by ID' })

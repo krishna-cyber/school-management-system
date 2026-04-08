@@ -39,15 +39,40 @@ export class ClassService {
     }
   }
 
-  findAll() {
+  async findAll(countStudent: boolean) {
+    console.log(countStudent);
+    if (countStudent) {
+      const data = await this.classModel.aggregate([
+        {
+          $lookup: {
+            from: 'students',
+            localField: '_id',
+            foreignField: 'class',
+            as: 'totalStudents',
+          },
+        },
+        {
+          $addFields: {
+            totalStudents: { $size: '$totalStudents' },
+          },
+        },
+      ]);
+      console.log(data);
+      return data as [Class & { totalStudents: number }];
+    }
+
     return this.classModel.find();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid class ID');
     }
-    return this.classModel.findById(id);
+    const data = await this.classModel.findById(id);
+    if (!data) {
+      throw new BadRequestException('Class not found');
+    }
+    return data;
   }
 
   update(id: string, updateClassDto: UpdateClassDto) {
