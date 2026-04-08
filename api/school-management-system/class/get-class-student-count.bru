@@ -1,13 +1,17 @@
 meta {
-  name: get-class-by-id
+  name: get-class-student-count
   type: http
   seq: 5
 }
 
 get {
-  url: {{base_url}}/class/6992f9f2ff4a7b633cfe6205
+  url: {{base_url}}/class?count_student=true
   body: json
   auth: inherit
+}
+
+params:query {
+  count_student: true
 }
 
 headers {

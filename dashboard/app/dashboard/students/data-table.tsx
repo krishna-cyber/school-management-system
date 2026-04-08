@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
   type SortingState,
   type VisibilityState,
+  type Table as TableType,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -12,6 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+
 import { cn } from "@/lib/utils"
 // import { type NavigateFn } from "@/hooks/use-table-url-state"
 import {
@@ -27,14 +29,104 @@ import { DataTablePagination } from "@/components/data-table"
 import { type Student } from "./data/schema"
 // import { DataTableBulkActions } from "./data-table-bulk-actions"
 import { studentColumns as columns } from "./data/columns"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { DataTableFacetedFilter } from "./faceted-filter"
+import { X } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import api from "@/lib/api"
+import { Class } from "../classes/page"
 
 type DataTableProps = {
   readonly data: Student[]
   // search: Record<string, unknown>
   // navigate: NavigateFn
 }
+type DataTableToolbarProps<TData> = {
+  table: TableType<TData>
+  searchPlaceholder?: string
+  searchKey?: string
+  filters?: {
+    columnId: string
+    title: string
+    options: {
+      label: string
+      value: string
+      icon?: React.ComponentType<{ className?: string }>
+    }[]
+  }[]
+}
+
+export function DataTableToolbar<TData>({
+  table,
+  searchPlaceholder = "Filter...",
+  searchKey,
+  filters = [],
+}: DataTableToolbarProps<TData>) {
+  const isFiltered =
+    table.getState().columnFilters.length > 0 || table.getState().globalFilter
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
+        {searchKey ? (
+          <Input
+            placeholder={searchPlaceholder}
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+        ) : (
+          <Input
+            placeholder={searchPlaceholder}
+            value={table.getState().globalFilter ?? ""}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+        )}
+        <div className="flex gap-x-2">
+          {filters.map((filter) => {
+            const column = table.getColumn(filter.columnId)
+            if (!column) return null
+            return (
+              <DataTableFacetedFilter
+                key={filter.columnId}
+                column={column}
+                title={filter.title}
+                options={filter.options}
+              />
+            )
+          })}
+        </div>
+        {isFiltered && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              table.resetColumnFilters()
+              table.setGlobalFilter("")
+            }}
+            className="h-8 px-2 lg:px-3"
+          >
+            Reset
+            <X className="ms-2 h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export function StudentsTable({ data }: DataTableProps) {
+  const { data: classData } = useQuery({
+    queryKey: ["classes"],
+    queryFn: () =>
+      api.get("/class").then((res) => res.data) as Promise<Class[]>,
+  })
+
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -71,6 +163,7 @@ export function StudentsTable({ data }: DataTableProps) {
   const table = useReactTable({
     data,
     columns,
+
     state: {
       sorting,
       // pagination,
@@ -98,28 +191,40 @@ export function StudentsTable({ data }: DataTableProps) {
 
   return (
     <div className={cn("mt-2.5 flex flex-1 flex-col gap-4")}>
-      {/* <DataTableToolbar
+      <DataTableToolbar
         table={table}
-        searchPlaceholder="Filter users..."
-        searchKey="username"
+        searchPlaceholder="Filter students..."
+        searchKey="full_name"
         filters={[
           {
-            columnId: "status",
-            title: "Status",
-            options: [
-              { label: "Active", value: "active" },
-              { label: "Inactive", value: "inactive" },
-              { label: "Invited", value: "invited" },
-              { label: "Suspended", value: "suspended" },
-            ],
+            columnId: "class",
+            title: "Class",
+            options:
+              classData?.map((cls) => ({
+                label: cls.level + " " + cls.section,
+                value: cls._id,
+              })) || [],
           },
           {
-            columnId: "role",
-            title: "Role",
-            options: roles.map((role) => ({ ...role })),
+            columnId: "gender",
+            title: "Gender",
+            options: [
+              {
+                label: "Male",
+                value: "male",
+              },
+              {
+                label: "Female",
+                value: "female",
+              },
+              {
+                label: "Other",
+                value: "other",
+              },
+            ],
           },
         ]}
-      /> */}
+      />
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
