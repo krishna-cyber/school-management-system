@@ -7,9 +7,8 @@ import {
 } from '@nestjs/common';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
-import { Model, MongooseError, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Attendance } from './schema/attendance.schema';
-import { Class } from 'src/class/schemas/class.schema';
 
 @Injectable()
 export class AttendanceService {
@@ -53,15 +52,32 @@ export class AttendanceService {
       .populate('class', 'level section _id');
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} attendance`;
+  async findOne(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid attendance ID format.');
+    }
+    return await this.attendanceModel
+      .findById(id)
+      .populate('class', 'level section _id');
   }
 
-  async update(id: number, updateAttendanceDto: UpdateAttendanceDto) {
-    return `This action updates a #${id} attendance`;
+  async update(id: string, updateAttendanceDto: UpdateAttendanceDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid attendance ID format.');
+    }
+    return await this.attendanceModel.findByIdAndUpdate(
+      id,
+      updateAttendanceDto,
+      {
+        returnDocument: 'after',
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} attendance`;
+  async remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid attendance ID format.');
+    }
+    return await this.attendanceModel.findByIdAndDelete(id);
   }
 }
