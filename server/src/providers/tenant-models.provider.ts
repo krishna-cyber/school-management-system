@@ -56,6 +56,12 @@ export const ModelProvider = {
   attendanceModel: {
     provide: 'ATTENDANCE_MODEL',
     useFactory: (tenantConnection: Connection) => {
+      //class and student model is required in attendance schema to build the attendance model because
+      // of the reference of class and student in attendance schema,
+      //  so we need to build those models first before building attendance model
+
+      tenantConnection.model(Class.name, ClassSchema);
+      tenantConnection.model(Student.name, StudentSchema);
       return tenantConnection.model(Attendance.name, AttendanceSchema);
     },
     inject: ['TENANT_CONNECTION'],

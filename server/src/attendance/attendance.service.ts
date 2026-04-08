@@ -9,6 +9,7 @@ import { CreateAttendanceDto } from './dto/create-attendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
 import { Model, MongooseError, Types } from 'mongoose';
 import { Attendance } from './schema/attendance.schema';
+import { Class } from 'src/class/schemas/class.schema';
 
 @Injectable()
 export class AttendanceService {
@@ -46,15 +47,17 @@ export class AttendanceService {
     }
   }
 
-  findAll() {
-    return this.attendanceModel.find().populate('class');
+  async findAll() {
+    return await this.attendanceModel
+      .find()
+      .populate('class', 'level section _id');
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} attendance`;
   }
 
-  update(id: number, updateAttendanceDto: UpdateAttendanceDto) {
+  async update(id: number, updateAttendanceDto: UpdateAttendanceDto) {
     return `This action updates a #${id} attendance`;
   }
 

@@ -11,6 +11,7 @@ import { TenantConnectionProvider } from 'src/providers/tenant-connection.provid
   providers: [
     AttendanceService,
     TenantConnectionProvider,
+    ModelProvider.classModel,
     ModelProvider.attendanceModel,
   ],
 })
