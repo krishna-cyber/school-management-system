@@ -1,0 +1,46 @@
+meta {
+  name: attendance-student
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/attendance
+  body: json
+  auth: inherit
+}
+
+headers {
+  x-tenant-id: pioneer
+}
+
+body:json {
+  {
+    "class": "69d61aee1772f209770dd6bf",
+    "date": "2026-04-08",
+    "attendance": [
+      {
+        "studentId": "661f1c2f9b1e8a0091111111",
+        "status": "present"
+      },
+      {
+        "studentId": "661f1c2f9b1e8a0092222222",
+        "status": "absent"
+      },
+      {
+        "studentId": "661f1c2f9b1e8a0093333333",
+        "status": "leave",
+        "remarks": "Medical leave"
+      },
+      {
+        "studentId": "661f1c2f9b1e8a0094444444",
+        "status": "present"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

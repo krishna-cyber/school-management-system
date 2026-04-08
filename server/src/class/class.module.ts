@@ -6,8 +6,6 @@ import {
 } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { ClassController } from './class.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Class, ClassSchema } from './schemas/class.schema';
 import { ClassProcessor } from './class.worker';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';

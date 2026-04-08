@@ -23,6 +23,7 @@ import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { auth } from './utils/auth';
 import { AuthModule as AuthMo } from './auth/auth.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -102,6 +103,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
     ClassModule,
     FeeModule,
     AuthMo,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [
