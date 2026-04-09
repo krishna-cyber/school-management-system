@@ -8,11 +8,9 @@ import {
   ArrowUpDown,
   ClipboardClock,
   Ellipsis,
-  Mars,
+  Info,
   Trash,
   UserPen,
-  Users,
-  Venus,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -145,12 +143,11 @@ export const columns: ColumnDef<Class>[] = [
       <Tooltip>
         <TooltipTrigger>
           {" "}
-          <Badge
-            className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-            variant="outline"
-          >
-            <Users />
+          <Badge variant="outline">
             {row.original.totalStudents || 0}
+            <span className="ms-1">
+              <Info size={14} />
+            </span>
           </Badge>
         </TooltipTrigger>
         <TooltipContent>
