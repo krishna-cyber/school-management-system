@@ -1,5 +1,5 @@
 "use client"
-import { Column, ColumnDef, Row } from "@tanstack/react-table"
+import { ColumnDef, Row } from "@tanstack/react-table"
 import { Class } from "./page"
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
@@ -27,11 +27,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-type DataTableColumnHeaderProps<TData, TValue> =
-  React.HTMLAttributes<HTMLDivElement> & {
-    column: Column<TData, TValue>
-    title: string
-  }
 type DataTableRowActionsProps = {
   row: Row<Class>
 }

@@ -11,6 +11,7 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table"
 import React from "react"
@@ -20,16 +21,6 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [filteredData, setFilteredData] = React.useState<z.infer<
-    typeof formSchema
-  > | null>(null)
-
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    setFilteredData(data)
-  }
-  const handleReset = () => {
-    setFilteredData(null)
-  }
 
   const table = useReactTable({
     data: data || [],
