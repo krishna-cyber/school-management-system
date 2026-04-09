@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import ReactQueryProvider from "./query-provider"
 import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -34,7 +35,9 @@ export default function RootLayout({
     >
       <body>
         <ReactQueryProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ThemeProvider>
         </ReactQueryProvider>
         <Toaster />
       </body>

@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { CalendarIcon, X } from "lucide-react"
+import { CalendarIcon, LoaderCircle, X } from "lucide-react"
 import { z } from "zod/v3"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldGroup } from "@/components/ui/field"
@@ -38,49 +38,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useQuery } from "@tanstack/react-query"
+import api from "@/lib/api"
+import { Class } from "../classes/page"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
-const classes = [
-  {
-    label: "Class 1",
-    value: "class1",
-    sections: [
-      { label: "Section 1A", value: "section1A" },
-      { label: "Section 1B", value: "section1B" },
-      { label: "Section 1C", value: "section1C" },
-    ],
-  },
-  {
-    label: "Class 2",
-    value: "class2",
-    sections: [
-      { label: "Section 2A", value: "section2A" },
-      { label: "Section 2B", value: "section2B" },
-      { label: "Section 2C", value: "section2C" },
-    ],
-  },
-  {
-    label: "Class 3",
-    value: "class3",
-    sections: [
-      { label: "Section 3A", value: "section3A" },
-      { label: "Section 3B", value: "section3B" },
-      { label: "Section 3C", value: "section3C" },
-    ],
-  },
-  {
-    label: "Class 4",
-    value: "class4",
-    sections: [
-      { label: "Section 4A", value: "section4A" },
-      { label: "Section 4B", value: "section4B" },
-      { label: "Section 4C", value: "section4C" },
-    ],
-  },
-]
 
 const formSchema = z.object({
   class: z.string(),
@@ -89,8 +54,10 @@ const formSchema = z.object({
 
 export function DataFilter({
   handleSubmit: handleSubmitProp,
+  isfetching,
 }: {
   handleSubmit: (data: z.infer<typeof formSchema>) => void
+  isfetching: boolean
 }) {
   const { register, control, handleSubmit, watch, reset } = useForm<
     z.infer<typeof formSchema>
@@ -101,6 +68,14 @@ export function DataFilter({
       date: new Date(),
     },
     mode: "onChange",
+  })
+  const { data: classData } = useQuery({
+    queryKey: ["classes"],
+    queryFn: async () => {
+      // Replace with your API call to fetch classes
+      const response = await api.get("/class")
+      return response.data as Class[]
+    },
   })
   const selectedClass = watch("class")
   const selectedDate = watch("date")
@@ -125,9 +100,9 @@ export function DataFilter({
                     <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
                   <SelectContent>
-                    {classes.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                    {classData?.map((cls) => (
+                      <SelectItem key={cls._id} value={cls._id}>
+                        {cls.level} {cls.section}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -175,6 +150,7 @@ export function DataFilter({
               variant="ghost"
               onClick={() => {
                 reset({ class: "", date: new Date() })
+                handleSubmitProp({ class: "", date: new Date() })
               }}
               className="h-8 px-2 lg:px-3"
             >
@@ -186,8 +162,9 @@ export function DataFilter({
           <Button
             type="submit"
             form="filter-form"
-            disabled={!selectedClass || !selectedDate}
+            disabled={!selectedClass || !selectedDate || isfetching}
           >
+            {isfetching && <LoaderCircle className="h-5 w-5 animate-spin" />}
             Submit
           </Button>
         </div>
@@ -202,13 +179,36 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  //TODO:usequery and fetch based on data changes on filter section
+  const [filteredData, setFilteredData] = React.useState<z.infer<
+    typeof formSchema
+  > | null>(null)
+
+  const { data: attendanceData, isFetching } = useQuery({
+    queryKey: ["attendanceData", filteredData],
+    queryFn: async () => {
+      // Replace with your API call to fetch attendance data based on filters
+      const response = await api.get("/attendance", {
+        params: {
+          class: filteredData?.class, // Assuming class is a property in TData
+          date: filteredData?.date, // Assuming date is a property in TData
+        },
+      })
+
+      return response.data as TData[]
+    },
+    placeholderData: [],
+    enabled: !!filteredData, // Only fetch when both class and date are selected
+  })
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+    setFilteredData(data)
   }
+  const handleReset = () => {
+    setFilteredData(null)
+  }
+
   const table = useReactTable({
-    data,
+    data: attendanceData || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
@@ -220,7 +220,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="overflow-hidden rounded-md border">
-      <DataFilter handleSubmit={handleSubmit} />
+      <DataFilter isfetching={isFetching} handleSubmit={handleSubmit} />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

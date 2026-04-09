@@ -1,0 +1,25 @@
+meta {
+  name: get-attendance-class and date
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/attendance?class=10&date=2024-5-20
+  body: none
+  auth: inherit
+}
+
+params:query {
+  class: 10
+  date: 2024-5-20
+}
+
+headers {
+  x-tenant-id: pioneer
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
