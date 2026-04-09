@@ -40,7 +40,6 @@ export class ClassService {
   }
 
   async findAll(countStudent: boolean) {
-    console.log(countStudent);
     if (countStudent) {
       const data = await this.classModel.aggregate([
         {
@@ -48,17 +47,48 @@ export class ClassService {
             from: 'students',
             localField: '_id',
             foreignField: 'class',
-            as: 'totalStudents',
+            as: 'students',
           },
         },
         {
           $addFields: {
-            totalStudents: { $size: '$totalStudents' },
+            totalStudents: { $size: '$students' },
+            maleStudents: {
+              $size: {
+                $filter: {
+                  input: '$students',
+                  cond: { $eq: ['$$this.gender', 'male'] },
+                },
+              },
+            },
+            femaleStudents: {
+              $size: {
+                $filter: {
+                  input: '$students',
+                  cond: { $eq: ['$$this.gender', 'female'] },
+                },
+              },
+            },
+            otherStudents: {
+              $size: {
+                $filter: {
+                  input: '$students',
+                  cond: { $eq: ['$$this.gender', 'other'] },
+                },
+              },
+            },
           },
         },
+        { $unset: 'students' },
       ]);
-      console.log(data);
-      return data as [Class & { totalStudents: number }];
+      return data as [
+        Class & {
+          totalStudents: number;
+          maleStudents: number;
+          femaleStudents: number;
+          otherStudents: number;
+        },
+      ];
     }
 
     return this.classModel.find();
