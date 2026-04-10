@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { z } from "zod/v3"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -19,7 +19,7 @@ import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
 
 const formSchema = z.object({
-  email: z.email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address"),
   password: z.string().nonempty("Password is required"),
 })
 

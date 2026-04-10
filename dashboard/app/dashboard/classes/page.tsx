@@ -5,6 +5,8 @@ import { columns } from "./columns"
 import api from "@/lib/api"
 import { cookies, headers } from "next/headers"
 import { authClient } from "@/lib/auth-client"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 
 export interface Subject {
   name: string
@@ -67,6 +69,9 @@ const Page = async () => {
             Update and manage attendance records for students here.
           </p>
         </div>
+        <Button className="space-x-1">
+          <span>Register New Class</span> <Plus size={18} />
+        </Button>
 
         {/* filter section classes and section */}
 

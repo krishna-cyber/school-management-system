@@ -4,6 +4,7 @@ import { UserPlus } from "lucide-react"
 import { StudentsTable } from "@/app/dashboard/students/data-table"
 import { cn } from "@/lib/utils"
 import { students } from "./data/students"
+import Link from "next/link"
 
 const Page = () => {
   const layout = "fixed" // or "fluid"
@@ -32,8 +33,10 @@ const Page = () => {
           </div>
 
           {/* <Button className="space-x-1" onClick={() => setOpen("add")}> */}
-          <Button className="space-x-1">
-            <span>Register Student</span> <UserPlus size={18} />
+          <Button asChild className="space-x-1">
+            <Link href="/dashboard/admissions">
+              <span>Register Student</span> <UserPlus size={18} />
+            </Link>
           </Button>
         </div>
         <StudentsTable data={students} />
