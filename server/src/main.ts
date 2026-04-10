@@ -1,4 +1,6 @@
-import './instrument';
+// THIS MUST BE THE FIRST IMPORT
+import tracer from './tracer';
+// Now import NestJS and other application modules
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -6,6 +8,8 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { LoggingInterceptor } from './interceptors/logger.interceptor';
 
 async function bootstrap() {
+  // Start tracer immediately before creating the app
+  tracer.start();
   const app = await NestFactory.create(AppModule, {
     bodyParser: false,
     logger: ['log', 'error', 'warn', 'debug', 'verbose', 'fatal'],
