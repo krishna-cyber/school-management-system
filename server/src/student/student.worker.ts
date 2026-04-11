@@ -6,7 +6,6 @@ import { readFile, utils } from 'xlsx';
 import { BadRequestException, Inject } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { ImportParentDto, ImportStudentDto } from './dto/import-student.dto';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Class } from 'src/class/schemas/class.schema';
 import { logger } from '@sentry/nestjs';
@@ -16,6 +15,7 @@ export interface ImportJobData {
   fileName: string;
   fileSize: number;
   timestamp: Date;
+  tenantId: string;
 }
 
 @Processor('teacherImportQueue', { concurrency: 5 })

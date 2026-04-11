@@ -5,6 +5,7 @@ import { Class } from './schemas/class.schema';
 import mongoose, { Model, Types } from 'mongoose';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { ImportJobData } from 'src/student/student.worker';
 
 @Injectable()
 export class ClassService {
@@ -121,8 +122,14 @@ export class ClassService {
     return { success: true, message: 'Class deleted successfully' };
   }
 
-  async importFromExcel(file: Express.Multer.File) {
-    await this.importQueue.add('classImportQueue', { filePath: file.path });
+  async importFromExcel(file: Express.Multer.File, tenantId: string) {
+    console.log('Received file for import:', file.path);
+    await this.importQueue.add('classImportQueue', {
+      filePath: file.path,
+      tenantId: tenantId,
+    });
+
+    //Todo:setup logger for job added for tenantId with jobid and jobstatus
     // This method will be implemented in the future to handle the import of class data from an Excel file.
     return {
       success: true,

@@ -14,6 +14,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { TenantsMiddleware } from 'src/middlewares/tenants.middleware';
 import { ModelProvider } from 'src/providers/tenant-models.provider';
 import { TenantConnectionProvider } from 'src/providers/tenant-connection.provider';
+import { TenantConnectionService } from 'src/providers/tenant.connection.service';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { TenantConnectionProvider } from 'src/providers/tenant-connection.provid
     ClassService,
     ClassProcessor,
     TenantConnectionProvider,
+    TenantConnectionService,
     ModelProvider.classModel,
   ],
   exports: [],

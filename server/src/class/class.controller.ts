@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
@@ -19,6 +20,10 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
+
+interface TenantRequest extends Request {
+  tenantId: string;
+}
 
 @Controller('class')
 export class ClassController {
@@ -112,7 +117,10 @@ export class ClassController {
 
   @Post('import')
   @UseInterceptors(FileInterceptor('file'))
-  importFromExcel(@UploadedFile() file: Express.Multer.File) {
-    return this.classService.importFromExcel(file);
+  importFromExcel(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: TenantRequest,
+  ) {
+    return this.classService.importFromExcel(file, req?.tenantId);
   }
 }

@@ -24,7 +24,7 @@ import { auth } from './utils/auth';
 import { AuthModule as AuthMo } from './auth/auth.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { AttendanceModule } from './attendance/attendance.module';
-
+import { LoggerModule } from 'pino-nestjs';
 @Module({
   imports: [
     SentryModule.forRoot(),
@@ -42,7 +42,7 @@ import { AttendanceModule } from './attendance/attendance.module';
       load: [configuration],
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, LoggerModule.forRoot()],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('database.connectionString'),
         autoIndex: true,

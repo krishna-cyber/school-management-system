@@ -1,20 +1,19 @@
 // THIS MUST BE THE FIRST IMPORT
-import tracer from './tracer';
+import './tracer';
 // Now import NestJS and other application modules
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { LoggingInterceptor } from './interceptors/logger.interceptor';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'pino-nestjs';
 
 async function bootstrap() {
-  // Start tracer immediately before creating the app
-  tracer.start();
   const app = await NestFactory.create(AppModule, {
     bodyParser: false,
-    logger: ['log', 'error', 'warn', 'debug', 'verbose', 'fatal'],
+    bufferLogs: true,
   });
-  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  app.useLogger(app.get(Logger));
 
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, disableErrorMessages: false }),
@@ -35,6 +34,6 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
   await app.listen(process.env.PORT ?? 3000);
-  Logger.log('App running on port 3000');
+  console.log(`Server is running on port ${process.env.PORT ?? 3000}`);
 }
 bootstrap();
