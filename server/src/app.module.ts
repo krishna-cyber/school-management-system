@@ -1,33 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SentryModule, SentryGlobalFilter } from '@sentry/nestjs/setup';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { MongooseModule } from '@nestjs/mongoose';
-import { logger } from '@sentry/nestjs';
-import { StudentModule } from './student/student.module';
-import { TeacherModule } from './teacher/teacher.module';
-import { AnalyticsModule } from './analytics/analytics.module';
-import { ExamModule } from './exam/exam.module';
-import { ClassModule } from './class/class.module';
-import { FeeModule } from './fee/fee.module';
-import configuration from './config/configuration';
-import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { BullModule } from '@nestjs/bullmq';
-import { CacheModule } from '@nestjs/cache-manager';
-import { createKeyv } from '@keyv/redis';
-import { AuthModule } from '@thallesp/nestjs-better-auth';
-import { auth } from './utils/auth';
-import { AuthModule as AuthMo } from './auth/auth.module';
-import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { AttendanceModule } from './attendance/attendance.module';
-import { LoggerModule } from 'pino-nestjs';
+import { createKeyv } from '@keyv/redis'
+import { BullModule } from '@nestjs/bullmq'
+import { CacheModule } from '@nestjs/cache-manager'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { APP_GUARD } from '@nestjs/core'
+import { MongooseModule } from '@nestjs/mongoose'
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { AuthModule } from '@thallesp/nestjs-better-auth'
+import { LoggerModule } from 'pino-nestjs'
+import { AnalyticsModule } from './analytics/analytics.module'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { AttendanceModule } from './attendance/attendance.module'
+import { AuthModule as AuthMo } from './auth/auth.module'
+import { ClassModule } from './class/class.module'
+import configuration from './config/configuration'
+import { ExamModule } from './exam/exam.module'
+import { FeeModule } from './fee/fee.module'
+import { logger } from './logger.service'
+import { LoggerMiddleware } from './middlewares/logger.middleware'
+import { StudentModule } from './student/student.module'
+import { TeacherModule } from './teacher/teacher.module'
+import { auth } from './utils/auth'
 @Module({
   imports: [
-    SentryModule.forRoot(),
     AuthModule.forRoot({
       auth,
       bodyParser: {
@@ -52,16 +48,16 @@ import { LoggerModule } from 'pino-nestjs';
               connectionId: connection.id,
               connectionHost: connection.host,
               connectionPort: connection.port,
-            });
-          });
+            })
+          })
           connection.on('disconnected', () => {
             logger.warn('MongoDB connection disconnected', {
               connectionId: connection.id,
               connectionHost: connection.host,
               connectionPort: connection.port,
-            });
-          });
-          return connection;
+            })
+          })
+          return connection
         },
       }),
       inject: [ConfigService],
@@ -109,10 +105,6 @@ import { LoggerModule } from 'pino-nestjs';
   providers: [
     AppService,
     {
-      provide: APP_FILTER,
-      useClass: SentryGlobalFilter,
-    },
-    {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
@@ -121,6 +113,6 @@ import { LoggerModule } from 'pino-nestjs';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*'); // log all routes
+    consumer.apply(LoggerMiddleware).forRoutes('*') // log all routes
   }
 }

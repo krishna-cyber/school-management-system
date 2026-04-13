@@ -1,27 +1,28 @@
-import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Inject, ValidationError } from '@nestjs/common';
-import { Job } from 'bullmq';
-import { ImportJobData } from 'src/student/student.worker';
-import { readFile, utils } from 'xlsx';
-import { Class, ClassSchema } from './schemas/class.schema';
-import { CreateClassDto } from './dto/create-class.dto';
-import { validate } from 'class-validator';
-import { Model } from 'mongoose';
-import { plainToInstance } from 'class-transformer';
-import { logger } from '@sentry/nestjs';
-import { unlink } from 'node:fs/promises';
-import { TenantConnectionService } from 'src/providers/tenant.connection.service';
+import { unlink } from 'node:fs/promises'
+import { Processor, WorkerHost } from '@nestjs/bullmq'
+import { Inject, ValidationError } from '@nestjs/common'
+
+import { Job } from 'bullmq'
+import { plainToInstance } from 'class-transformer'
+import { validate } from 'class-validator'
+import { Model } from 'mongoose'
+import { logger } from 'src/logger.service'
+import { TenantConnectionService } from 'src/providers/tenant.connection.service'
+import { ImportJobData } from 'src/student/student.worker'
+import { readFile, utils } from 'xlsx'
+import { CreateClassDto } from './dto/create-class.dto'
+import { Class, ClassSchema } from './schemas/class.schema'
 
 interface ClassData {
-  class_key: string;
-  level: string;
-  section: string;
+  class_key: string
+  level: string
+  section: string
 }
 
 interface SubjectData {
-  class_key: string;
-  subject_name: string;
-  publication: string;
+  class_key: string
+  subject_name: string
+  publication: string
 }
 
 @Processor('classImportQueue', { concurrency: 5 })
@@ -29,34 +30,33 @@ export class ClassProcessor extends WorkerHost {
   constructor(
     private readonly tenantConnectionProvider: TenantConnectionService,
   ) {
-    super();
+    super()
   }
   async process(job: Job<ImportJobData>) {
+    const { filePath, tenantId } = job.data
     try {
-      const { filePath, tenantId } = job.data;
-
       // step 1: read the Excel file
-      const workbook = readFile(filePath);
-      const classSheet = workbook.Sheets['classes'];
-      const compulsorySubjectSheet = workbook.Sheets['compulsory_subjects'];
-      const optionalSubjectSheet = workbook.Sheets['optional_subjects'];
+      const workbook = readFile(filePath)
+      const classSheet = workbook.Sheets['classes']
+      const compulsorySubjectSheet = workbook.Sheets['compulsory_subjects']
+      const optionalSubjectSheet = workbook.Sheets['optional_subjects']
 
       // step 2: get the tenant-specific connection and model
       const tenantConnection =
-        this.tenantConnectionProvider.getConnection(tenantId);
-      const ClassModel = tenantConnection.model(Class.name, ClassSchema);
+        this.tenantConnectionProvider.getConnection(tenantId)
+      const ClassModel = tenantConnection.model(Class.name, ClassSchema)
 
       if (!classSheet || !compulsorySubjectSheet || !optionalSubjectSheet) {
         throw new Error(
           'One or more required sheets (classes, compulsory_subjects, optional_subjects) are missing in the Excel file.',
-        );
+        )
       }
 
       const classData: ClassData[] = utils.sheet_to_json(classSheet, {
         header: ['class_key', 'level', 'section'],
         range: 1, //skip the header row
         defval: null, //set default value for empty cells to null
-      });
+      })
       const compulsorySubjectsData: SubjectData[] = utils.sheet_to_json(
         compulsorySubjectSheet,
         {
@@ -64,7 +64,7 @@ export class ClassProcessor extends WorkerHost {
           range: 1, //skip the header row
           defval: null, //set default value for empty cells to null
         },
-      );
+      )
       const optionalSubjectsData: SubjectData[] = utils.sheet_to_json(
         optionalSubjectSheet,
         {
@@ -72,20 +72,20 @@ export class ClassProcessor extends WorkerHost {
           range: 1, //skip the header row
           defval: null, //set default value for empty cells to null
         },
-      );
+      )
 
       //recombine the data based on class_key
-      const errors: ValidationError[] = [];
-      const validDocuments: Class[] = [];
+      const errors: ValidationError[] = []
+      const validDocuments: Class[] = []
 
       for (const classItem of classData) {
-        const classKey = classItem.class_key;
+        const classKey = classItem.class_key
         const compulsorySubjects = compulsorySubjectsData.filter((subject) => {
-          return subject.class_key === classKey;
-        });
+          return subject.class_key === classKey
+        })
         const optionalSubjects = optionalSubjectsData.filter(
           (subject) => subject.class_key === classKey,
-        );
+        )
 
         const classDto = plainToInstance(
           CreateClassDto,
@@ -96,25 +96,25 @@ export class ClassProcessor extends WorkerHost {
               return {
                 name: subject.subject_name,
                 publication: subject.publication,
-              };
+              }
             }),
             optional_subjects: optionalSubjects.map((subject) => {
               return {
                 name: subject.subject_name,
                 publication: subject.publication,
-              };
+              }
             }),
           },
           { enableImplicitConversion: true },
-        );
+        )
 
         const classError = await validate(classDto, {
           whitelist: true,
           forbidNonWhitelisted: true,
-        });
+        })
 
         if (classError.length > 0) {
-          errors.push(...classError);
+          errors.push(...classError)
         } else {
           validDocuments.push({
             level: classDto.level,
@@ -123,32 +123,32 @@ export class ClassProcessor extends WorkerHost {
               return {
                 name: subject.name,
                 publication: subject.publication,
-              };
+              }
             }),
             optional_subjects: classDto.optional_subjects.map((subject) => {
               return {
                 name: subject.name,
                 publication: subject.publication,
-              };
+              }
             }),
-          });
+          })
         }
       }
 
-      let successCount: number = 0;
-      let failedCount: number = 0;
+      let successCount: number = 0
+      let failedCount: number = 0
       try {
         await ClassModel.insertMany(validDocuments, {
           ordered: false,
-        });
+        })
       } catch (error: unknown) {
         const err = error as {
-          insertedDocs?: any[];
-          writeErrors?: any[];
-        };
+          insertedDocs?: any[]
+          writeErrors?: any[]
+        }
 
-        successCount = err.insertedDocs?.length ?? 0;
-        failedCount = err.writeErrors?.length ?? 0;
+        successCount = err.insertedDocs?.length ?? 0
+        failedCount = err.writeErrors?.length ?? 0
       }
 
       logger.info('Class import job completed', {
@@ -156,20 +156,20 @@ export class ClassProcessor extends WorkerHost {
         validationErrors: errors,
         successCount,
         failedCount,
-      });
+      })
 
       return {
         validatedDocuments: validDocuments,
         validationErrors: errors,
         successCount,
         failedCount,
-      };
+      }
     } catch (error) {
       throw error instanceof Error
         ? error
-        : new Error('An unknown error occurred');
+        : new Error('An unknown error occurred')
     } finally {
-      await unlink(job.data.filePath).catch(() => {});
+      await unlink(job.data.filePath).catch(() => {})
     }
   }
 }

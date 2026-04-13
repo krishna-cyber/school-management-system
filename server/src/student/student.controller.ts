@@ -1,29 +1,31 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseInterceptors,
-  UploadedFile,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
-} from '@nestjs/common';
-import { StudentService } from './student.service';
-import {
-  CreateStudentDto,
-  CreateStudentResponseDto,
-} from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
-import { StudentDataTransferService } from './student-data-transfer.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import {
   ApiBadRequestResponse,
   ApiOperation,
   ApiResponse,
-} from '@nestjs/swagger';
-import { ListAllEntities } from './dto/query-param.dto';
+} from '@nestjs/swagger'
+import type { TenantRequest } from 'src/class/class.controller'
+import {
+  CreateStudentDto,
+  CreateStudentResponseDto,
+} from './dto/create-student.dto'
+import { ListAllEntities } from './dto/query-param.dto'
+import { UpdateStudentDto } from './dto/update-student.dto'
+import { StudentService } from './student.service'
+import { StudentDataTransferService } from './student-data-transfer.service'
 
 @Controller('student')
 export class StudentController {
@@ -47,12 +49,12 @@ export class StudentController {
   })
   @Post()
   create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentService.create(createStudentDto);
+    return this.studentService.create(createStudentDto)
   }
 
   @Get()
   findAll(@Query() query: ListAllEntities) {
-    return this.studentService.findAll(query);
+    return this.studentService.findAll(query)
   }
 
   @ApiOperation({ summary: 'Get a student by ID' })
@@ -71,13 +73,13 @@ export class StudentController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.studentService.findOne(id);
+    return this.studentService.findOne(id)
   }
 
   @ApiOperation({ summary: 'Update a student by ID' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentService.update(id, updateStudentDto);
+    return this.studentService.update(id, updateStudentDto)
   }
 
   @ApiOperation({ summary: 'Delete a student by ID' })
@@ -91,17 +93,20 @@ export class StudentController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.studentService.remove(id);
+    return this.studentService.remove(id)
   }
 
   @Post('/import')
   @UseInterceptors(FileInterceptor('file'))
-  importStudents(@UploadedFile() file: Express.Multer.File) {
-    return this.studentImportService.import(file);
+  importStudents(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: TenantRequest,
+  ) {
+    return this.studentImportService.import(file, req.tenantId)
   }
 
   @Get('/export')
   exportStudents() {
-    return this.studentImportService.export();
+    return this.studentImportService.export()
   }
 }

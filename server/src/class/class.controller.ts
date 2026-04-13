@@ -1,28 +1,28 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseInterceptors,
-  UploadedFile,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
   Req,
-} from '@nestjs/common';
-import { ClassService } from './class.service';
-import { CreateClassDto } from './dto/create-class.dto';
-import { UpdateClassDto } from './dto/update-class.dto';
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor'
 import {
   ApiBadRequestResponse,
   ApiOperation,
   ApiResponse,
-} from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
+} from '@nestjs/swagger'
+import { ClassService } from './class.service'
+import { CreateClassDto } from './dto/create-class.dto'
+import { UpdateClassDto } from './dto/update-class.dto'
 
-interface TenantRequest extends Request {
-  tenantId: string;
+export interface TenantRequest extends Request {
+  tenantId: string
 }
 
 @Controller('class')
@@ -47,12 +47,12 @@ export class ClassController {
   })
   @Post()
   create(@Body() createClassDto: CreateClassDto) {
-    return this.classService.create(createClassDto);
+    return this.classService.create(createClassDto)
   }
 
   @Get()
   findAll(@Query('count_student') countStudent: boolean) {
-    return this.classService.findAll(countStudent);
+    return this.classService.findAll(countStudent)
   }
 
   @ApiOperation({ summary: 'Get a class by ID' })
@@ -71,7 +71,7 @@ export class ClassController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.classService.findOne(id);
+    return this.classService.findOne(id)
   }
 
   @ApiOperation({ summary: 'Update a class by ID' })
@@ -90,7 +90,7 @@ export class ClassController {
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
-    return this.classService.update(id, updateClassDto);
+    return this.classService.update(id, updateClassDto)
   }
 
   @ApiOperation({ summary: 'Delete a class by ID' })
@@ -112,7 +112,7 @@ export class ClassController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.classService.remove(id);
+    return this.classService.remove(id)
   }
 
   @Post('import')
@@ -121,6 +121,6 @@ export class ClassController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: TenantRequest,
   ) {
-    return this.classService.importFromExcel(file, req?.tenantId);
+    return this.classService.importFromExcel(file, req?.tenantId)
   }
 }
