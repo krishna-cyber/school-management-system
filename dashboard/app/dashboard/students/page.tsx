@@ -1,10 +1,11 @@
+import { Import, UserPlus } from "lucide-react"
+import Link from "next/link"
 import React from "react"
-import { Button } from "@/components/ui/button"
-import { UserPlus } from "lucide-react"
 import { StudentsTable } from "@/app/dashboard/students/data-table"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { students } from "./data/students"
-import Link from "next/link"
+import ImportStudentFromFile from "./import-students"
 
 const Page = () => {
   const layout = "fixed" // or "fluid"
@@ -31,13 +32,15 @@ const Page = () => {
               Manage your students and their details here.
             </p>
           </div>
-
-          {/* <Button className="space-x-1" onClick={() => setOpen("add")}> */}
-          <Button asChild className="space-x-1">
-            <Link href="/dashboard/admissions">
-              <span>Register Student</span> <UserPlus size={18} />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <ImportStudentFromFile />
+            {/* <Button className="space-x-1" onClick={() => setOpen("add")}> */}
+            <Button asChild className="space-x-1">
+              <Link href="/dashboard/admissions">
+                <span>Register Student</span> <UserPlus size={18} />
+              </Link>
+            </Button>
+          </div>
         </div>
         <StudentsTable data={students} />
       </main>
