@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-import { SkipThrottle } from '@nestjs/throttler';
+import { Controller, Get } from '@nestjs/common'
+import { SkipThrottle } from '@nestjs/throttler'
+import { AppService } from './app.service'
 
 @SkipThrottle({ short: true, medium: true, long: true })
 @Controller()
@@ -9,6 +9,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello();
+    return this.appService.getHello()
   }
 }

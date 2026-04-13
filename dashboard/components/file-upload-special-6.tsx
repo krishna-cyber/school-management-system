@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { ImagePlus, X } from "lucide-react";
-import * as React from "react";
+import { ImagePlus, X } from "lucide-react"
+import * as React from "react"
 
-import { Button } from "@/components/ui/button";
-import { FileUpload, FileUploadTrigger } from "@/components/ui/file-upload";
+import { Button } from "@/components/ui/button"
+import { FileUpload, FileUploadTrigger } from "@/components/ui/file-upload"
 
-export const title = "Gallery Image Add";
+export const title = "Gallery Image Add"
 
 const Example = () => {
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [files, setFiles] = React.useState<File[]>([])
 
   const handleRemove = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index));
-  };
+    setFiles(files.filter((_, i) => i !== index))
+  }
 
   return (
     <div className="w-full max-w-md">
@@ -28,7 +28,7 @@ const Example = () => {
         <div className="grid grid-cols-3 gap-2">
           {files.map((file, index) => (
             <div key={index} className="group relative aspect-square">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/** biome-ignore lint/performance/noImgElement: img tag needed for gallery */}
               <img
                 src={URL.createObjectURL(file)}
                 alt={file.name}
@@ -58,7 +58,7 @@ const Example = () => {
         {files.length}/6 images
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default Example;
+export default Example

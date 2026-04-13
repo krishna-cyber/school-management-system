@@ -1,5 +1,5 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserGeneral from "@/components/blocks/account-setting/account-setting"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const tabs = [
   { name: "General", value: "general" },
