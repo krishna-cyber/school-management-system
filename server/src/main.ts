@@ -13,7 +13,7 @@ async function bootstrap() {
     bufferLogs: true,
   })
 
-  app.useLogger(app.get(Logger))
+  // app.useLogger(app.get(Logger))
 
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, disableErrorMessages: false }),

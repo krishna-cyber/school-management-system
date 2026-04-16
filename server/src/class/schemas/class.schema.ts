@@ -1,13 +1,13 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
-import { Subject, SubjectSchema } from './subject.schema';
-import { Fee } from 'src/fee/schemas/fee.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { HydratedDocument, Types } from 'mongoose'
+import { Fee } from 'src/fee/schemas/fee.schema'
+import { Subject, SubjectSchema } from './subject.schema'
 
 export type ClassDocumentOverride = {
-  subject: Subject;
-};
+  subject: Subject
+}
 
-export type ClassDocument = HydratedDocument<Class, ClassDocumentOverride>;
+export type ClassDocument = HydratedDocument<Class, ClassDocumentOverride>
 
 @Schema({
   timestamps: true,
@@ -31,25 +31,25 @@ export class Class {
       '10',
     ],
   })
-  level: string;
+  level: string
 
   @Prop({ type: String, default: 'A' })
-  section: string;
+  section: string
 
   @Prop({ type: [SubjectSchema], required: true })
-  compulsory_subjects: Subject[];
+  compulsory_subjects: Subject[]
 
   @Prop({ type: [SubjectSchema], default: [] })
-  optional_subjects: Subject[];
+  optional_subjects: Subject[]
 
   @Prop({
     type: [Types.ObjectId],
     ref: Fee.name,
     default: [],
   })
-  fees_associated?: string[];
+  fees_associated?: string[]
 }
 
-export const ClassSchema = SchemaFactory.createForClass(Class);
+export const ClassSchema = SchemaFactory.createForClass(Class)
 
-ClassSchema.index({ level: 1, section: 1 }, { unique: true });
+ClassSchema.index({ level: 1, section: 1 }, { unique: true })

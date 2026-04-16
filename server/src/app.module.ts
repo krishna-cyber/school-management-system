@@ -7,6 +7,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { AuthModule } from '@thallesp/nestjs-better-auth'
+import { pinoHttp } from 'pino-http'
 import { LoggerModule } from 'pino-nestjs'
 import { AnalyticsModule } from './analytics/analytics.module'
 import { AppController } from './app.controller'
@@ -19,11 +20,25 @@ import { ExamModule } from './exam/exam.module'
 import { FeeModule } from './fee/fee.module'
 import { logger } from './logger.service'
 import { LoggerMiddleware } from './middlewares/logger.middleware'
+import { TenantsMiddleware } from './middlewares/tenants.middleware'
+import { ScheduleModule } from './schedule/schedule.module'
 import { StudentModule } from './student/student.module'
 import { TeacherModule } from './teacher/teacher.module'
 import { auth } from './utils/auth'
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: false,
+            colorize: true,
+            translateTime: 'HH:MM:SS',
+          },
+        },
+      },
+    }),
     AuthModule.forRoot({
       auth,
       bodyParser: {
@@ -100,6 +115,7 @@ import { auth } from './utils/auth'
     FeeModule,
     AuthMo,
     AttendanceModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [

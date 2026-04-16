@@ -1,0 +1,53 @@
+meta {
+  name: Untitled
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/schedule
+  body: json
+  auth: inherit
+}
+
+headers {
+  x-tenant-id: pioneer
+}
+
+body:json {
+  {
+    "classId": "661f1c9e8b3c2a5d9c123456",
+    "day": "monday",
+    "periods": [
+      {
+        "startTime": "09:00",
+        "endTime": "09:45",
+        "subject": "Mathematics",
+        "teacher": "661f1d2a8b3c2a5d9c654321"
+      },
+      {
+        "startTime": "09:45",
+        "endTime": "10:30",
+        "subject": "Science",
+        "teacher": "661f1d2a8b3c2a5d9c654322"
+      },
+      {
+        "startTime": "10:45",
+        "endTime": "11:30",
+        "subject": "English",
+        "teacher": "661f1d2a8b3c2a5d9c654323"
+      },
+      {
+        "startTime": "11:30",
+        "endTime": "12:15",
+        "subject": "Social Studies",
+        "teacher": "661f1d2a8b3c2a5d9c654324"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

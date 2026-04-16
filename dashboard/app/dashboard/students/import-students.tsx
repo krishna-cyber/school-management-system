@@ -40,7 +40,7 @@ const ImportStudentFromFile = () => {
 
   return (
     <Drawer open={open} onOpenChange={setOpen} direction="right">
-      <DrawerTrigger>
+      <DrawerTrigger asChild>
         <Button>
           Import From File <ImportIcon size={18} />
         </Button>
@@ -58,7 +58,7 @@ const ImportStudentFromFile = () => {
           <Button disabled={!file} onClick={handleSubmit}>
             Submit
           </Button>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button onClick={handleClose} variant="outline">
               Cancel
             </Button>
