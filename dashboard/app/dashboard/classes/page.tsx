@@ -1,12 +1,13 @@
+import { Plus } from "lucide-react"
+import { cookies, headers } from "next/headers"
 import React from "react"
-import { DataTable } from "./data-table"
+import { Button } from "@/components/ui/button"
+import api from "@/lib/api"
+import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 import { columns } from "./columns"
-import api from "@/lib/api"
-import { cookies, headers } from "next/headers"
-import { authClient } from "@/lib/auth-client"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { DataTable } from "./data-table"
+import RegisterClass from "./register-class"
 
 export interface Subject {
   name: string
@@ -69,9 +70,9 @@ const Page = async () => {
             Update and manage attendance records for students here.
           </p>
         </div>
-        <Button className="space-x-1">
-          <span>Register New Class</span> <Plus size={18} />
-        </Button>
+
+        {/* Register new class form page click  drawer*/}
+        <RegisterClass />
 
         {/* filter section classes and section */}
 

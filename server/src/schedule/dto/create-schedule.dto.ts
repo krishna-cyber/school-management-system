@@ -22,6 +22,10 @@ export class periodDto {
 }
 
 export class CreateScheduleDto {
+  @IsString()
+  @IsEnum(['regular', 'coaching', 'exam'])
+  title: string
+
   @IsMongoId()
   classId: string
 
@@ -35,7 +39,7 @@ export class CreateScheduleDto {
     'friday',
     'saturday',
   ])
-  day: string
+  day: string[]
 
   @IsArray()
   @ValidateNested({ each: true })

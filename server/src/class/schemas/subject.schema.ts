@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { HydratedDocument } from 'mongoose'
 
-export type SubjectDocument = HydratedDocument<Subject>;
+export type SubjectDocument = HydratedDocument<Subject>
 
 @Schema({
   _id: false,
@@ -11,10 +11,10 @@ export type SubjectDocument = HydratedDocument<Subject>;
 })
 export class Subject {
   @Prop({ required: true, type: String })
-  name: string;
+  name: string
 
-  @Prop({ required: true, type: String })
-  publication: string;
+  @Prop({ required: true, type: String, default: null })
+  publication: string | null
 }
 
-export const SubjectSchema = SchemaFactory.createForClass(Subject);
+export const SubjectSchema = SchemaFactory.createForClass(Subject)

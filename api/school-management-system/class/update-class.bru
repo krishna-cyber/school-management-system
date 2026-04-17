@@ -1,11 +1,11 @@
 meta {
-  name: register-class
+  name: update-class
   type: http
-  seq: 4
+  seq: 6
 }
 
-post {
-  url: {{base_url}}/class
+patch {
+  url: {{base_url}}/class/69d61aee1772f209770dd6bf
   body: json
   auth: inherit
 }
@@ -28,12 +28,13 @@ body:json {
         "publication": "CDC Nepal"
       }
     ],
-    "optional_subject": [
+    "optional_subjects": [
       {
         "name": "Computer Science",
         "publication": "CDC Nepal"
       }
-    ]
+    ],
+    "fees_associated":["69e1e022f8c593f050f023f2"]
     
   }
   

@@ -30,12 +30,21 @@ export const PeriodSchema = SchemaFactory.createForClass(Period)
 export type ScheduleDocument = HydratedDocument<Schedule, PeriodDocument>
 @Schema({ timestamps: true })
 export class Schedule {
+  @Prop({
+    required: true,
+    type: String,
+    enum: ['regular', 'coaching', 'exam'],
+    default: 'regular',
+  })
+  title: string
+
   @Prop({ type: Types.ObjectId, ref: Class.name, required: true })
   classId: string
 
   @Prop({
-    type: String,
+    type: [String],
     required: true,
+    default: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     enum: [
       'sunday',
       'monday',
@@ -46,7 +55,7 @@ export class Schedule {
       'saturday',
     ],
   })
-  day: string
+  day: string[]
 
   @Prop({
     type: [PeriodSchema],

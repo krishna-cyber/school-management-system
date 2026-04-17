@@ -69,7 +69,7 @@ export class ClassController {
       error: 'Bad Request',
     },
   })
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.classService.findOne(id)
   }
@@ -88,7 +88,7 @@ export class ClassController {
       error: 'Bad Request',
     },
   })
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
     return this.classService.update(id, updateClassDto)
   }

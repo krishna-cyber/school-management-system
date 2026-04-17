@@ -104,18 +104,25 @@ export class ClassService {
     return data
   }
 
-  update(id: string, updateClassDto: UpdateClassDto) {
+  async update(id: string, updateClassDto: UpdateClassDto) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid class ID')
     }
-    return this.classModel.findByIdAndUpdate(id, updateClassDto, { new: true })
+
+    return await this.classModel.findByIdAndUpdate(
+      new Types.ObjectId(id),
+      updateClassDto,
+      {
+        new: true,
+      },
+    )
   }
 
   async remove(id: string) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid class ID')
     }
-    await this.classModel.findByIdAndDelete(id)
+    await this.classModel.findByIdAndDelete(new Types.ObjectId(id))
 
     return { success: true, message: 'Class deleted successfully' }
   }

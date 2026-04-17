@@ -1,23 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Res,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
-} from '@nestjs/common';
-import type { Response } from 'express';
-import { FeeService } from './fee.service';
-import { CreateFeeDto } from './dto/create-fee.dto';
-import { UpdateFeeDto } from './dto/update-fee.dto';
+  Res,
+} from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiOperation,
   ApiResponse,
-} from '@nestjs/swagger';
+} from '@nestjs/swagger'
+import type { Response } from 'express'
+import { CreateFeeDto } from './dto/create-fee.dto'
+import { UpdateFeeDto } from './dto/update-fee.dto'
+import { FeeService } from './fee.service'
 
 @Controller('fee')
 export class FeeController {
@@ -40,12 +40,12 @@ export class FeeController {
   })
   @Post()
   create(@Body() createFeeDto: CreateFeeDto) {
-    return this.feeService.create(createFeeDto);
+    return this.feeService.create(createFeeDto)
   }
 
   @Get()
   findAll(@Query('studentId') studentId?: string) {
-    return this.feeService.findAll(studentId);
+    return this.feeService.findAll(studentId)
   }
 
   @ApiOperation({ summary: 'Get a Fee by ID' })
@@ -64,7 +64,7 @@ export class FeeController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.feeService.findOne(id);
+    return this.feeService.findOne(id)
   }
 
   @ApiOperation({ summary: 'Update a fee by ID' })
@@ -83,7 +83,7 @@ export class FeeController {
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFeeDto: UpdateFeeDto) {
-    return this.feeService.update(id, updateFeeDto);
+    return this.feeService.update(id, updateFeeDto)
   }
 
   @ApiOperation({ summary: 'Delete a fee by ID' })
@@ -105,7 +105,7 @@ export class FeeController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.feeService.remove(id);
+    return this.feeService.remove(id)
   }
 
   @Get('generate-invoice/:studentId')
@@ -113,12 +113,12 @@ export class FeeController {
     @Param('studentId') studentId: string,
     @Res() res: Response,
   ) {
-    const invoice = await this.feeService.generateInvoice(studentId);
+    const invoice = await this.feeService.generateInvoice(studentId)
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename="invoice-${studentId}.pdf"`,
       'Content-Length': invoice.length,
-    });
-    res.end(invoice);
+    })
+    res.end(invoice)
   }
 }

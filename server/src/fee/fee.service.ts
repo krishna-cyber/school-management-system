@@ -1,32 +1,32 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { CreateFeeDto } from './dto/create-fee.dto';
-import { UpdateFeeDto } from './dto/update-fee.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Fee } from './schemas/fee.schema';
-import { Model, Types } from 'mongoose';
-import path from 'node:path';
-import fs from 'node:fs';
-import * as Handlebars from 'handlebars';
-import * as puppeteer from 'puppeteer';
-import { Student } from 'src/student/schemas/student.schema';
+import fs from 'node:fs'
+import path from 'node:path'
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import * as Handlebars from 'handlebars'
+import { Model, Types } from 'mongoose'
+import * as puppeteer from 'puppeteer'
+import { Student } from 'src/student/schemas/student.schema'
+import { CreateFeeDto } from './dto/create-fee.dto'
+import { UpdateFeeDto } from './dto/update-fee.dto'
+import { Fee } from './schemas/fee.schema'
 
 interface Invoice {
-  date: string;
-  logo: string;
-  schoolName: string;
-  schoolAddress: string;
-  schoolContact: string;
-  invoiceNumber: string;
-  panNumber: string[];
-  studentName: string;
-  class: string;
-  rollNumber?: string;
-  section: string;
-  invoices: { description: string; amount: number; remark?: string }[];
-  totalAmount: number;
-  amountInWords: string;
-  pageNumber: number;
-  totalPages: number;
+  date: string
+  logo: string
+  schoolName: string
+  schoolAddress: string
+  schoolContact: string
+  invoiceNumber: string
+  panNumber: string[]
+  studentName: string
+  class: string
+  rollNumber?: string
+  section: string
+  invoices: { description: string; amount: number; remark?: string }[]
+  totalAmount: number
+  amountInWords: string
+  pageNumber: number
+  totalPages: number
 }
 
 @Injectable()
@@ -36,12 +36,12 @@ export class FeeService {
     @Inject('STUDENT_MODEL') private readonly studentModel: Model<Student>,
   ) {}
   async create(createFeeDto: CreateFeeDto) {
-    const createdFee = new this.feeModel(createFeeDto);
-    await createdFee.save();
+    const createdFee = new this.feeModel(createFeeDto)
+    await createdFee.save()
     return {
       success: true,
       message: 'Fee created successfully',
-    };
+    }
   }
 
   async findAll(studentId?: string) {
@@ -55,68 +55,68 @@ export class FeeService {
             model: Fee.name,
           },
         })
-        .populate('extra_fees');
+        .populate('extra_fees')
 
       if (!student) {
-        throw new BadRequestException('Student not found');
+        throw new BadRequestException('Student not found')
       }
       const associatedFees = [
         ...new Set([
           ...(student.class?.fees_associated || []),
           ...(student.extra_fees || []),
         ]),
-      ];
+      ]
 
       return {
         success: true,
         message: 'Fees for the student retrieved successfully',
         data: associatedFees,
-      };
+      }
     }
 
     return {
       success: true,
       message: 'All fees retrieved successfully',
       data: await this.feeModel.find().sort({ createdAt: -1 }),
-    };
+    }
   }
 
   findOne(id: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('Invalid fee ID');
+      throw new BadRequestException('Invalid fee ID')
     }
 
-    return this.feeModel.findById(id);
+    return this.feeModel.findById(id)
   }
 
   update(id: string, updateFeeDto: UpdateFeeDto) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('Invalid fee ID');
+      throw new BadRequestException('Invalid fee ID')
     }
-    return this.feeModel.findByIdAndUpdate(id, updateFeeDto, { new: true });
+    return this.feeModel.findByIdAndUpdate(id, updateFeeDto, { new: true })
   }
 
   remove(id: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('Invalid fee ID');
+      throw new BadRequestException('Invalid fee ID')
     }
-    return this.feeModel.findByIdAndDelete(id);
+    return this.feeModel.findByIdAndDelete(id)
   }
 
   async generateInvoice(studentId: string) {
     if (!Types.ObjectId.isValid(studentId)) {
-      throw new BadRequestException('Invalid student ID');
+      throw new BadRequestException('Invalid student ID')
     }
 
     const templatePath = path.join(
       __dirname,
       '../templates/invoice.template.hbs',
-    );
+    )
 
     const imageBase64 = fs.readFileSync(
       path.join(__dirname, '../templates/logo.png'),
       'base64',
-    );
+    )
     const invoice: Invoice = {
       date: new Date().toLocaleDateString(),
       logo: imageBase64,
@@ -147,26 +147,24 @@ export class FeeService {
       amountInWords: 'Six Thousand Four Hundred Twenty Five Only',
       pageNumber: 1,
       totalPages: 1,
-    };
+    }
 
-    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+    const templateContent = fs.readFileSync(templatePath, 'utf-8')
 
-    const template = Handlebars.compile(templateContent);
-    Handlebars.registerHelper('inc', function (value: number): number {
-      return value + 1;
-    });
+    const template = Handlebars.compile(templateContent)
+    Handlebars.registerHelper('inc', (value: number): number => value + 1)
 
-    const html = template(invoice);
+    const html = template(invoice)
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: true })
 
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    const page = await browser.newPage()
+    await page.setContent(html, { waitUntil: 'networkidle0' })
 
-    const pdfBuffer = await page.pdf({ format: 'A4' });
+    const pdfBuffer = await page.pdf({ format: 'A4' })
 
-    await browser.close();
+    await browser.close()
     // Logic to generate invoice for the student
-    return pdfBuffer;
+    return pdfBuffer
   }
 }

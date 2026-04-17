@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 import {
   ArrayMinSize,
   IsArray,
@@ -7,7 +7,7 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
-} from 'class-validator';
+} from 'class-validator'
 
 class SubjectDto {
   @ApiProperty({
@@ -15,14 +15,14 @@ class SubjectDto {
     example: 'Mathematics',
   })
   @IsString()
-  name: string;
+  name: string
 
   @ApiProperty({
     description: 'The publication associated with the subject',
     example: 'Oxford University Press',
   })
   @IsString()
-  publication: string;
+  publication: string
 }
 
 export class CreateClassDto {
@@ -46,14 +46,14 @@ export class CreateClassDto {
     '9',
     '10',
   ])
-  level: string;
+  level: string
 
   @IsString()
   @ApiProperty({
     description: 'The section of the class',
     example: 'A',
   })
-  section: string;
+  section: string
 
   @ApiProperty({
     description: 'The compulsory subjects for the class',
@@ -63,14 +63,23 @@ export class CreateClassDto {
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => SubjectDto)
-  compulsory_subjects: SubjectDto[];
+  compulsory_subjects: SubjectDto[]
 
   @ApiPropertyOptional({
     description: 'The optional subjects for the class',
     type: [SubjectDto],
   })
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => SubjectDto)
-  optional_subjects: SubjectDto[];
+  optional_subjects?: SubjectDto[]
+
+  @IsArray()
+  @IsOptional()
+  @ApiPropertyOptional({
+    description: 'The fees associated with the class',
+    example: ['64b8f1f1c9e77c0015d8b123', '64b8f1f1c9e77c0015d8b124'],
+  })
+  fees_associated?: string[]
 }
