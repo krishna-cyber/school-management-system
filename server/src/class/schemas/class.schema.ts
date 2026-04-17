@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { HydratedDocument, Types } from 'mongoose'
-import { Fee } from 'src/fee/schemas/fee.schema'
+import { Fee } from 'src/fee/schemas/fee-structure.schema'
 import { Subject, SubjectSchema } from './subject.schema'
 
 export type ClassDocumentOverride = {

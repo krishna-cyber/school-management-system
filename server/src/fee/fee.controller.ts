@@ -121,4 +121,10 @@ export class FeeController {
     })
     res.end(invoice)
   }
+
+  @Post('/fee-deposit')
+  async feeDeposit(@Body() createFeeDto: CreateFeeDto, @Res() res: Response) {
+    const result = await this.feeService.feeDeposit(createFeeDto)
+    res.json(result)
+  }
 }

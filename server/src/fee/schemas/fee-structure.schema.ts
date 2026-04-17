@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { HydratedDocument } from 'mongoose'
 
-export type FeeDocument = HydratedDocument<Fee>;
+export type FeeDocument = HydratedDocument<Fee>
 
 @Schema({
   timestamps: true,
@@ -11,7 +11,10 @@ export class Fee {
     required: true,
     type: String,
   })
-  title: string;
+  title: string // "Tuition Fee - Grade 10"
+
+  @Prop()
+  academic_year: string // "2023-2024"
 
   @Prop({
     required: true,
@@ -19,38 +22,38 @@ export class Fee {
     enum: ['tuition', 'transportation', 'hostel', 'miscellaneous'],
     default: 'tuition',
   })
-  type: string;
+  type: string
 
   @Prop({
     required: true,
     type: Number,
   })
-  amount: number;
+  amount: number
 
   @Prop({
     default: 0,
     type: Number,
   })
-  discount: number;
+  discount: number
 
   @Prop({
     required: true,
     type: Date,
     default: Date.now,
   })
-  valid_from: Date;
+  valid_from: Date
 
   @Prop({
     type: Date,
     default: null,
   })
-  valid_to: Date;
+  valid_to: Date
 
   @Prop({
     type: Boolean,
     default: true,
   })
-  is_active: boolean;
+  is_active: boolean
 
   @Prop({
     required: true,
@@ -58,7 +61,7 @@ export class Fee {
     enum: ['daily', 'weekly', 'monthly', 'yearly', 'one-time'],
     default: 'monthly',
   })
-  repetition: string;
+  frequency: string
 }
 
-export const FeeSchema = SchemaFactory.createForClass(Fee);
+export const FeeSchema = SchemaFactory.createForClass(Fee)

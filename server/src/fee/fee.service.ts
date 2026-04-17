@@ -8,7 +8,7 @@ import * as puppeteer from 'puppeteer'
 import { Student } from 'src/student/schemas/student.schema'
 import { CreateFeeDto } from './dto/create-fee.dto'
 import { UpdateFeeDto } from './dto/update-fee.dto'
-import { Fee } from './schemas/fee.schema'
+import { Fee } from './schemas/fee-structure.schema'
 
 interface Invoice {
   date: string
@@ -166,5 +166,15 @@ export class FeeService {
     await browser.close()
     // Logic to generate invoice for the student
     return pdfBuffer
+  }
+
+  async feeDeposit(createFeeDto: CreateFeeDto) {
+    // Logic to handle fee deposit
+    const createdFee = new this.feeModel(createFeeDto)
+    await createdFee.save()
+    return {
+      success: true,
+      message: 'Fee deposited successfully',
+    }
   }
 }

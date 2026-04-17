@@ -6,7 +6,7 @@ import {
 import { Class, ClassSchema } from 'src/class/schemas/class.schema'
 import { Exam, ExamSchema } from 'src/exam/schemas/exam.schema'
 import { Marksheet, MarksheetSchema } from 'src/exam/schemas/marksheet.schema'
-import { Fee, FeeSchema } from 'src/fee/schemas/fee.schema'
+import { Fee, FeeSchema } from 'src/fee/schemas/fee-structure.schema'
 import { Schedule, ScheduleSchema } from 'src/schedule/schemas/schedule.schema'
 import { Student, StudentSchema } from 'src/student/schemas/student.schema'
 import { Teacher, TeacherSchema } from 'src/teacher/schemas/teacher.schema'
@@ -38,6 +38,7 @@ export const ModelProvider = {
   feeModel: {
     provide: 'FEE_MODEL',
     useFactory: (tenantConnection: Connection) => {
+      tenantConnection.model(Class.name, ClassSchema)
       return tenantConnection.model(Fee.name, FeeSchema)
     },
     inject: ['TENANT_CONNECTION'],
