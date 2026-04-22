@@ -1,0 +1,9 @@
+{
+  "name": "school-management-system-root",
+  "private": true,
+  "scripts": {
+    "biome:check": "npx --yes @biomejs/biome check .",
+    "biome:fix": "npx --yes @biomejs/biome check --write .",
+    "biome:format": "npx --yes @biomejs/biome format --write ."
+  }
+}

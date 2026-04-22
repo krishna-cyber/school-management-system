@@ -9,7 +9,6 @@ export type PaymentDocument = HydratedDocument<Payment>
 export class Payment {
   @Prop({ required: true, type: String })
   studentId: string
-
   @Prop({ required: true, type: [String] })
   fee: string[]
   total_amount: number

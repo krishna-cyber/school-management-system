@@ -1,9 +1,20 @@
 {
   "root": false,
   "extends": "//",
-  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "ignoreUnknown": false },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/node_modules/**",
+      "!**/.next/**",
+      "!**/.turbo/**",
+      "!**/coverage/**",
+      "!**/dist/**",
+      "!**/.pnpm-store/**"
+    ]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
