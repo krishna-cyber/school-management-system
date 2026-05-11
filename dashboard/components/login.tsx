@@ -2,7 +2,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod/v3"
+import { Logo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,9 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Logo } from "@/components/logo"
 import { authClient } from "@/lib/auth-client"
-import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -33,7 +33,7 @@ const Login = () => {
   })
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const { data: response, error } = await authClient.signIn.email({
+    await authClient.signIn.email({
       email: data.email, // required
       password: data.password, // required
       rememberMe: true,

@@ -1,0 +1,20 @@
+meta {
+  name: get-session
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/auth/get-session
+  body: json
+  auth: inherit
+}
+
+headers {
+  x-tenant-id: GWA
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,20 +1,27 @@
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
-
 import "./globals.css"
+import {
+  DM_Sans,
+  Fraunces,
+  Geist,
+  Geist_Mono,
+  JetBrains_Mono,
+} from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
-import ReactQueryProvider from "./query-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+import ReactQueryProvider from "./query-provider"
 
-const fontSans = Geist({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-fraunces",
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
 })
-
-const jetbrainsMono = JetBrains_Mono({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-dm-sans",
+  weight: ["300", "400", "500", "600"],
 })
 
 export default function RootLayout({
@@ -28,9 +35,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(
         "antialiased",
-        fontSans.variable,
+        fraunces.variable,
         "font-mono",
-        jetbrainsMono.variable
+        dmSans.variable
       )}
     >
       <body>
